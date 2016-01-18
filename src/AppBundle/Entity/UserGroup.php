@@ -35,7 +35,7 @@ class UserGroup
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Groups", inversedBy="userGroup")
+     * @ORM\ManyToOne(targetEntity="Groups", inversedBy="users")
      * @ORM\JoinColumn(name="group_id", referencedColumnName="id", nullable=false))
      */
     private $group;

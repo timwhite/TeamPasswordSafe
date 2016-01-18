@@ -19,6 +19,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        login_firewall:
+            pattern: ^/login$
+            anonymous: ~
+
         main:
             pattern: ^/
             form_login:
@@ -28,7 +32,6 @@ security:
                 # csrf_provider: form.csrf_provider
 
             logout:       true
-            anonymous:    true
             # activate different ways to authenticate
 
             # http_basic: ~

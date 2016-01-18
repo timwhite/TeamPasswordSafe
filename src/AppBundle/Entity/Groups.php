@@ -5,12 +5,15 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\Group as BaseGroup;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * Groups
  *
  * @ORM\Table(name="groups")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GroupsRepository")
+ * @UniqueEntity("name")
  */
 class Groups extends BaseGroup
 {
@@ -24,9 +27,7 @@ class Groups extends BaseGroup
     protected $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="groupKey", type="string", length=255)
+     * @ORM\Column(name="groupKey", type="binary", length=256)
      */
     private $groupKey;
 
@@ -40,11 +41,12 @@ class Groups extends BaseGroup
      */
     private $logins;
 
-    public function __construct()
+    public function __construct($name = null)
     {
-        parent::__construct();
+        parent::__construct($name);
         $this->users = new ArrayCollection();
         $this->logins = new ArrayCollection();
+        $this->groupKey = random_bytes(256);
 
     }
 
@@ -85,8 +87,6 @@ class Groups extends BaseGroup
     /**
      * Set groupKey
      *
-     * @param string $groupKey
-     *
      * @return Groups
      */
     public function setGroupKey($groupKey)
@@ -99,8 +99,6 @@ class Groups extends BaseGroup
     /**
      * Get groupKey
      *
-     * @return string
-     */
     public function getGroupKey()
     {
         return $this->groupKey;
