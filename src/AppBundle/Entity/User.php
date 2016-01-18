@@ -24,6 +24,22 @@ class User extends BaseUser
 
 
     /**
+     * @ORM\OneToMany(targetEntity="UserGroup", mappedBy="user")
+     */
+
+    protected $groups;
+
+
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+
+    }
+
+
+    /**
      * Get id
      *
      * @return int
