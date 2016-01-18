@@ -18,4 +18,11 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
         ]);
     }
+
+    /**
+     * @Route("/groups", name="groups")
+     */
+    public function showGroups() {
+        return $this->render('AppBundle:Default:groups.html.twig');
+    }
 }
