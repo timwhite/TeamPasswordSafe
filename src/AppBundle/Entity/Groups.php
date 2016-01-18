@@ -32,6 +32,11 @@ class Groups extends BaseGroup
     private $groupKey;
 
     /**
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
      * @ORM\OneToMany(targetEntity="UserGroup", mappedBy="group")
      */
     private $users;
@@ -170,5 +175,39 @@ class Groups extends BaseGroup
     public function getLogins()
     {
         return $this->logins;
+    }
+
+    /**
+     * Get groupKey
+     *
+     * @return binary
+     */
+    public function getGroupKey()
+    {
+        return $this->groupKey;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Groups
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }
