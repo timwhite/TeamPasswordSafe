@@ -1,4 +1,7 @@
 TeamPasswordSafe
 ================
 
-A Symfony project created on January 18, 2016, 6:00 pm.
+A Password Manager/Safe using the Symfony Framework
+
+**Currently the encryption part of the password safe hasn't been implemented,
+do not use in production**
