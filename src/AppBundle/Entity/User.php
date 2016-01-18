@@ -22,6 +22,12 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+
+    protected $name;
+
 
     /**
      * @ORM\OneToMany(targetEntity="UserGroup", mappedBy="user")
@@ -47,5 +53,29 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return User
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name ? $this->name : $this->getUsername();
     }
 }

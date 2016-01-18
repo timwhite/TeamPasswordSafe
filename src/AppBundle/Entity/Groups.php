@@ -146,11 +146,11 @@ class Groups extends BaseGroup
     /**
      * Add login
      *
-     * @param \AppBundle\Entity\Logins $login
+     * @param \AppBundle\Entity\Login $login
      *
      * @return Groups
      */
-    public function addLogin(\AppBundle\Entity\Logins $login)
+    public function addLogin(\AppBundle\Entity\Login $login)
     {
         $this->logins[] = $login;
 
@@ -160,9 +160,9 @@ class Groups extends BaseGroup
     /**
      * Remove login
      *
-     * @param \AppBundle\Entity\Logins $login
+     * @param \AppBundle\Entity\Login $login
      */
-    public function removeLogin(\AppBundle\Entity\Logins $login)
+    public function removeLogin(\AppBundle\Entity\Login $login)
     {
         $this->logins->removeElement($login);
     }

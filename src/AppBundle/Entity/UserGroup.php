@@ -121,4 +121,8 @@ class UserGroup
     {
         return $this->group;
     }
+
+    public function getRoles() {
+        return ['ROLE_USER'];
+    }
 }

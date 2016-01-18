@@ -20,7 +20,7 @@ security:
             security: false
 
         login_firewall:
-            pattern: ^/login$
+            pattern: ^/(login$|register|resetting)
             anonymous: ~
 
         main:
