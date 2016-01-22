@@ -24,7 +24,7 @@ class UserGroup
     /**
      * @var string
      *
-     * @ORM\Column(name="groupKey", type="string", length=255, nullable=true)
+     * @ORM\Column(name="groupKey", type="binary", length=256, nullable=true)
      */
     private $groupKey;
 
@@ -53,7 +53,7 @@ class UserGroup
     /**
      * Set groupKey
      *
-     * @param string $groupKey
+     * @param binary $groupKey
      *
      * @return UserGroup
      */
@@ -67,7 +67,7 @@ class UserGroup
     /**
      * Get groupKey
      *
-     * @return string
+     * @return binary
      */
     public function getGroupKey()
     {

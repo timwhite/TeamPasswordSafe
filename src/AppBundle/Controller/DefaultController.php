@@ -4,12 +4,16 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Groups;
 use AppBundle\Entity\Login;
+use AppBundle\Entity\User;
 use AppBundle\Entity\UserGroup;
 use AppBundle\Form\GroupsType;
 use AppBundle\Form\LoginType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use \Defuse\Crypto\Crypto;
+use Defuse\Crypto\Key;
+use \Defuse\Crypto\Exception as Ex;
 
 class DefaultController extends Controller
 {
@@ -49,9 +53,14 @@ class DefaultController extends Controller
             $em->persist($group);
 
             // Add yourself to group
+            $currentuser = $this->get('security.token_storage')->getToken()->getUser();
             $usergroup = new UserGroup();
             $usergroup->setGroup($group);
-            $usergroup->setUser($this->get('security.token_storage')->getToken()->getUser());
+            $usergroup->setUser($currentuser);
+
+            // Generate a key for this group
+            $usergroup->setGroupKey($this->generateNewGroupKey($currentuser));
+
             $em->persist($usergroup);
 
             $em->flush();
@@ -60,6 +69,33 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:newgroup.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    private function generateNewGroupKey(User $user)
+    {
+        /**
+         * @var $key Key
+         */
+        try {
+            $key = Crypto::createNewRandomKey();
+            // WARNING: Do NOT encode $key with bin2hex() or base64_encode(),
+            // they may leak the key to the attacker through side channels.
+        } catch (Ex\CryptoTestFailedException $ex) {
+            die('Cannot safely create a key');
+        } catch (Ex\CannotPerformOperationException $ex) {
+            die('Cannot safely create a key');
+        }
+
+        // Encrypt key with users public key
+        $pubKey = $user->getPubKey();
+
+        // TODO check return
+        openssl_public_encrypt($key->saveToAsciiSafeString(), $encryptedKey, $pubKey);
+
+        dump($encryptedKey);
+
+        return $encryptedKey;
+
     }
 
     /**

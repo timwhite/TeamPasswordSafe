@@ -27,11 +27,6 @@ class Groups extends BaseGroup
     protected $id;
 
     /**
-     * @ORM\Column(name="groupKey", type="binary", length=256)
-     */
-    private $groupKey;
-
-    /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
@@ -51,7 +46,6 @@ class Groups extends BaseGroup
         parent::__construct($name);
         $this->users = new ArrayCollection();
         $this->logins = new ArrayCollection();
-        $this->groupKey = random_bytes(256);
 
     }
 
@@ -87,26 +81,6 @@ class Groups extends BaseGroup
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set groupKey
-     *
-     * @return Groups
-     */
-    public function setGroupKey($groupKey)
-    {
-        $this->groupKey = $groupKey;
-
-        return $this;
-    }
-
-    /**
-     * Get groupKey
-     *
-    public function getGroupKey()
-    {
-        return $this->groupKey;
     }
 
     /**

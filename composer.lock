@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "43250aa8acce016864b40213b38f3642",
-    "content-hash": "ab53a6ef2089ec9c74b922bbef5a8cea",
+    "hash": "c597814a190d8477f632a9cb3b183da0",
+    "content-hash": "18b2aa84c35352788ece7e67af522a42",
     "packages": [
         {
             "name": "avanzu/admin-theme-bundle",
@@ -51,6 +51,55 @@
             ],
             "description": "Admin Theme based on the AdminLTE Template for easy integration into symfony",
             "time": "2015-12-29 23:17:55"
+        },
+        {
+            "name": "defuse/php-encryption",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/defuse/php-encryption.git",
+                "reference": "afda73a6b20d09ab5ec73830e2fd8b21b581fac8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/afda73a6b20d09ab5ec73830e2fd8b21b581fac8",
+                "reference": "afda73a6b20d09ab5ec73830e2fd8b21b581fac8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Hornby",
+                    "email": "havoc@defuse.ca"
+                }
+            ],
+            "description": "Secure PHP Encryption Library",
+            "keywords": [
+                "aes",
+                "authenticated encryption",
+                "cipher",
+                "crypto",
+                "cryptography",
+                "encrypt",
+                "encryption",
+                "openssl",
+                "security",
+                "symmetric key cryptography"
+            ],
+            "time": "2016-01-17 08:40:45"
         },
         {
             "name": "doctrine/annotations",
@@ -2201,7 +2250,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "friendsofsymfony/user-bundle": 20
+        "friendsofsymfony/user-bundle": 20,
+        "defuse/php-encryption": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
