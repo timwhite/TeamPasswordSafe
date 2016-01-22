@@ -1,0 +1,6 @@
+services:
+    appbundle.foslistener:
+        class: AppBundle\EventListener\FOSListener
+        arguments: ['@router']
+        tags:
+            - { name: kernel.event_subscriber }

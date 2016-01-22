@@ -35,6 +35,16 @@ class User extends BaseUser
 
     protected $groups;
 
+    /**
+     * @ORM\Column(name="pubKey", type="string", length=500)
+     */
+    protected $pubKey;
+
+    /**
+     * @ORM\Column(name="privateKey", type="string", length=2000)
+     */ 
+    protected $privateKey;
+
 
 
     public function __construct()
@@ -77,5 +87,53 @@ class User extends BaseUser
     public function getName()
     {
         return $this->name ? $this->name : $this->getUsername();
+    }
+
+    /**
+     * Set pubKey
+     *
+     * @param string $pubKey
+     *
+     * @return User
+     */
+    public function setPubKey($pubKey)
+    {
+        $this->pubKey = $pubKey;
+
+        return $this;
+    }
+
+    /**
+     * Get pubKey
+     *
+     * @return string
+     */
+    public function getPubKey()
+    {
+        return $this->pubKey;
+    }
+
+    /**
+     * Set privateKey
+     *
+     * @param string $privateKey
+     *
+     * @return User
+     */
+    public function setPrivateKey($privateKey)
+    {
+        $this->privateKey = $privateKey;
+
+        return $this;
+    }
+
+    /**
+     * Get privateKey
+     *
+     * @return string
+     */
+    public function getPrivateKey()
+    {
+        return $this->privateKey;
     }
 }
