@@ -71,6 +71,7 @@ class UserGroup
      */
     public function getGroupKey()
     {
+        rewind($this->groupKey);
         return stream_get_contents($this->groupKey);
     }
 

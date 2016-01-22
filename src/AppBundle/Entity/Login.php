@@ -45,7 +45,7 @@ class Login
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="binary", length=256)
+     * @ORM\Column(name="password", type="string", length=2048)
      */
     private $password;
 
@@ -166,7 +166,7 @@ class Login
      */
     public function getPassword()
     {
-        return stream_get_contents($this->password);
+        return $this->password;
     }
 
     /**

@@ -49,7 +49,7 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($group);
 
             // Add yourself to group
@@ -133,7 +133,7 @@ class DefaultController extends Controller
                 $this->get('security.token_storage')->getToken()->getUser()
             );
             $login->setPassword($encryptedPassword);
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($login);
 
             $em->flush();
@@ -166,7 +166,7 @@ class DefaultController extends Controller
         $privKey = $request->getSession()->get('pkey');
 
         // Get encrypted group key
-        $usergrouprepo = $this->getDoctrine()->getEntityManager()->getRepository(UserGroup::class);
+        $usergrouprepo = $this->getDoctrine()->getManager()->getRepository(UserGroup::class);
         /** @var UserGroup $usergroup */
         $usergroup = $usergrouprepo->findOneBy(
             [
@@ -175,6 +175,10 @@ class DefaultController extends Controller
             ]
         );
         $encryptedGroupKey = $usergroup->getGroupKey();
+
+        dump($user);
+        dump($group);
+        dump($usergroup);
 
         // Decrypt Group key with current users private key
         // TODO check return
@@ -206,7 +210,16 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            // With login, we need to encrypt the password to save it
+            $encryptedPassword = $this->encryptLoginWithGroupKey(
+                $request,
+                $login->getGroup(),
+                $form->get('plainPassword')->getData(),
+                $this->get('security.token_storage')->getToken()->getUser()
+            );
+            $login->setPassword($encryptedPassword);
+
+            $em = $this->getDoctrine()->getManager();
             $em->persist($login);
 
             $em->flush();
