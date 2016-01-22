@@ -92,8 +92,6 @@ class DefaultController extends Controller
         // TODO check return
         openssl_public_encrypt($key->saveToAsciiSafeString(), $encryptedKey, $pubKey);
 
-        dump($encryptedKey);
-
         return $encryptedKey;
 
     }
@@ -127,6 +125,14 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
+            // With login, we need to encrypt the password to save it
+            $encryptedPassword = $this->encryptLoginWithGroupKey(
+                $request,
+                $group,
+                $form->get('plainPassword')->getData(),
+                $this->get('security.token_storage')->getToken()->getUser()
+            );
+            $login->setPassword($encryptedPassword);
             $em = $this->getDoctrine()->getEntityManager();
             $em->persist($login);
 
@@ -138,15 +144,64 @@ class DefaultController extends Controller
         ]);
     }
 
+    private function encryptLoginWithGroupKey(Request $request, Groups $group, $loginpass, User $user)
+    {
+        $groupKey = $this->getGroupKey($request, $group, $user);
+        // Encrypt login with group key
+        $encryptedPass = Crypto::encrypt($loginpass, $groupKey);
+        return $encryptedPass;
+    }
+
+    private function decryptLoginWithGroupKey(Request $request, Groups $group, $encryptedLogin, User $user)
+    {
+        $groupKey = $this->getGroupKey($request, $group, $user);
+        // Decrypt login with group key
+        $plainPass = Crypto::decrypt($encryptedLogin, $groupKey);
+        return $plainPass;
+    }
+
+    private function getGroupKey(Request $request, Groups $group, User $user)
+    {
+        // Get private key of current user
+        $privKey = $request->getSession()->get('pkey');
+
+        // Get encrypted group key
+        $usergrouprepo = $this->getDoctrine()->getEntityManager()->getRepository(UserGroup::class);
+        /** @var UserGroup $usergroup */
+        $usergroup = $usergrouprepo->findOneBy(
+            [
+                'user' => $user->getId(),
+                'group' => $group->getId()
+            ]
+        );
+        $encryptedGroupKey = $usergroup->getGroupKey();
+
+        // Decrypt Group key with current users private key
+        // TODO check return
+        openssl_private_decrypt($encryptedGroupKey, $groupKey, $privKey);
+        $groupKey = Key::LoadFromAsciiSafeString($groupKey);
+        return $groupKey;
+    }
+
+
     /**
      * @Route("/login/edit/{loginid}", name="edit_login")
      */
     public function editLogin(Request $request, $loginid)
     {
         $loginRepo = $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Login');
+        /** @var Login $login */
         $login = $loginRepo->findOneById($loginid);
 
         $form = $this->createForm(LoginType::class, $login);
+
+        // Current password is encrypted, lets get the plain text version
+        $plainPassword = $this->decryptLoginWithGroupKey(
+            $request,
+            $login->getGroup(),
+            $login->getPassword(),
+            $this->get('security.token_storage')->getToken()->getUser());
+        $form->get('plainPassword')->setData($plainPassword);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())

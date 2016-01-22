@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,7 +20,7 @@ class LoginType extends AbstractType
             ->add('name')
             ->add('url')
             ->add('username')
-            ->add('password')
+            ->add('plainPassword', TextType::class, ['mapped' => false])
             ->add('notes')
             ->add('save', SubmitType::class, array('label' => 'Create Login'))
         ;
