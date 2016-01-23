@@ -163,11 +163,24 @@ class DefaultController extends Controller
             //   2. The key is wrong, or
             //   3. $ciphertext is not a valid ciphertext or was corrupted.
             // Assume the worst.
-            $this->addFlash('error', 'Unable to decode encrypted password - Editing now will overwrite current encrypted value');
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans('Unable to decode encrypted password - Editing now will overwrite current encrypted value')
+            );
         } catch (\Defuse\Crypto\Exception\CryptoTestFailedException $ex) {
-            $this->addFlash('Cannot safely perform decryption - Editing now will overwrite current encrypted value');
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans(
+                    'Cannot safely perform decryption - Editing now will overwrite current encrypted value'
+                )
+            );
         } catch (\Defuse\Crypto\Exception\CannotPerformOperationException $ex) {
-            $this->addFlash('Cannot safely perform decryption - Editing now will overwrite current encrypted value');
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans(
+                    'Cannot safely perform decryption - Editing now will overwrite current encrypted value'
+                )
+            );
         }
         return $plainPass;
     }
@@ -231,17 +244,18 @@ class DefaultController extends Controller
                 $this->get('security.token_storage')->getToken()->getUser()
             );
 
-            $this->addFlash(
-                'info',
-                strlen($encryptedPassword)
-            );
-
             $login->setPassword($encryptedPassword);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($login);
 
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                $this->get('translator')->trans('Login updated')
+            );
+
             return $this->redirectToRoute('logins', ['groupname' => $login->getGroup()->getName()] );
         }
         return $this->render('AppBundle:Default:login.html.twig', [

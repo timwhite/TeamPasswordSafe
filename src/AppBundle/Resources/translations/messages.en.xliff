@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2016-01-23T15:45:39Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="9c45710228b8f08741341ac18f78d04368b1959e" resname="Cannot safely perform decryption - Editing now will overwrite current encrypted value">
+        <source>Cannot safely perform decryption - Editing now will overwrite current encrypted value</source>
+        <target state="new">Cannot safely perform decryption - Editing now will overwrite current encrypted value</target>
+        <jms:reference-file line="173">AppBundle/Controller/DefaultController.php</jms:reference-file>
+        <jms:reference-file line="180">AppBundle/Controller/DefaultController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4fcd39a7275c94c6c8a841c4499e117af357de35" resname="Create Group">
+        <source>Create Group</source>
+        <target state="new">Create Group</target>
+        <jms:reference-file line="21">AppBundle/Form/GroupsType.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b365567e6b784483d2c598c2868e4c9c2f473b45" resname="Create Login">
+        <source>Create Login</source>
+        <target state="new">Create Login</target>
+        <jms:reference-file line="32">AppBundle/Form/LoginType.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4e5a2893bdcc7d239c1db72e4c4ffbe4bea73174" resname="Login">
+        <source>Login</source>
+        <target state="new">Login</target>
+        <jms:reference-file line="17">views/Default/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="6a90516077845efe23b78b9c7d35808541040d8a" resname="Login updated">
+        <source>Login updated</source>
+        <target state="new">Login updated</target>
+        <jms:reference-file line="256">AppBundle/Controller/DefaultController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4d844b57f458b51e44206996b0c3fab64a048710" resname="Unable to decode encrypted password - Editing now will overwrite current encrypted value">
+        <source>Unable to decode encrypted password - Editing now will overwrite current encrypted value</source>
+        <target state="new">Unable to decode encrypted password - Editing now will overwrite current encrypted value</target>
+        <jms:reference-file line="168">AppBundle/Controller/DefaultController.php</jms:reference-file>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
