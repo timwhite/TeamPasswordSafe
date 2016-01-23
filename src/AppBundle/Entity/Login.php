@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Login
@@ -43,9 +44,13 @@ class Login
     private $username;
 
     /**
+     * Length of encoded password is ~ 2x number of chars + 170
+     * Limit input to 1024 bytes and this field should be enough
+     *
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=2048)
+     * @Assert\Length(max=2300)
+     * @ORM\Column(name="password", type="string", length=2300)
      */
     private $password;
 

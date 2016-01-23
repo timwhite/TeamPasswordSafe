@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Validator\Constraints\Length;
 
 class LoginType extends AbstractType
 {
@@ -20,7 +21,13 @@ class LoginType extends AbstractType
             ->add('name')
             ->add('url')
             ->add('username')
-            ->add('plainPassword', TextType::class, ['mapped' => false])
+            ->add('plainPassword', TextType::class, [
+                'mapped' => false,
+                'attr' => ['maxlength' => 1024],
+                'constraints' => [
+                    new Length(['max' => 1024])
+                ]
+            ])
             ->add('notes')
             ->add('save', SubmitType::class, array('label' => 'Create Login'))
         ;

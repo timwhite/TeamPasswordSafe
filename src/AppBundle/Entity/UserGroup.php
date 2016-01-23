@@ -24,7 +24,7 @@ class UserGroup
     /**
      * @var string
      *
-     * @ORM\Column(name="groupKey", type="binary", length=256, nullable=true)
+     * @ORM\Column(name="groupKey", type="string", length=1024, nullable=true)
      */
     private $groupKey;
 
@@ -59,7 +59,7 @@ class UserGroup
      */
     public function setGroupKey($groupKey)
     {
-        $this->groupKey = $groupKey;
+        $this->groupKey = base64_encode($groupKey);
 
         return $this;
     }
@@ -71,8 +71,10 @@ class UserGroup
      */
     public function getGroupKey()
     {
-        rewind($this->groupKey);
-        return stream_get_contents($this->groupKey);
+        if($this->groupKey) {
+            return base64_decode($this->groupKey);
+        }
+        return $this->groupKey;
     }
 
     /**

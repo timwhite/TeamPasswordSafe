@@ -4,6 +4,9 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Doctrine\Common\Collections\Criteria;
+use AppBundle\Entity\UserGroup;
+
 
 /**
  * User
@@ -30,7 +33,7 @@ class User extends BaseUser
 
 
     /**
-     * @ORM\OneToMany(targetEntity="UserGroup", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="UserGroup", mappedBy="user", fetch="EAGER")
      */
 
     protected $groups;
@@ -135,5 +138,28 @@ class User extends BaseUser
     public function getPrivateKey()
     {
         return $this->privateKey;
+    }
+
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupsWithoutKeys()
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->isNull('groupKey'));
+
+        return $this->getGroups()->matching($criteria);
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGroupsWithKeys()
+    {
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->neq('groupKey', null));
+
+        return $this->getGroups()->matching($criteria);
     }
 }

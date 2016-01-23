@@ -10,7 +10,8 @@ Groups
 
 {% block page_content %}
 <div class="row">
-    {% for group in groups %}
+    {% for usergroup in usergroups %}
+        {% set group=usergroup.group %}
         <div class="col-sm-4">
             <div class="box">
                 <div class="box-header with-border">

@@ -32,10 +32,8 @@ class DefaultController extends Controller
      * @Route("/groups", name="groups")
      */
     public function showGroups() {
-        $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groups');
-        $groups = $groupRepo->findAll(); // TODO Make this only find groups you are a member of
         return $this->render('AppBundle:Default:groups.html.twig',
-            ['groups' => $groups]
+            ['usergroups' => $this->get('security.token_storage')->getToken()->getUser()->getGroupsWithKeys()]
         );
     }
 
@@ -156,7 +154,21 @@ class DefaultController extends Controller
     {
         $groupKey = $this->getGroupKey($request, $group, $user);
         // Decrypt login with group key
-        $plainPass = Crypto::decrypt($encryptedLogin, $groupKey);
+        $plainPass = "";
+        try {
+            $plainPass = Crypto::decrypt($encryptedLogin, $groupKey);
+        } catch (\Defuse\Crypto\Exception\InvalidCiphertextException $ex) { // VERY IMPORTANT
+            // Either:
+            //   1. The ciphertext was modified by the attacker,
+            //   2. The key is wrong, or
+            //   3. $ciphertext is not a valid ciphertext or was corrupted.
+            // Assume the worst.
+            $this->addFlash('error', 'Unable to decode encrypted password - Editing now will overwrite current encrypted value');
+        } catch (\Defuse\Crypto\Exception\CryptoTestFailedException $ex) {
+            $this->addFlash('Cannot safely perform decryption - Editing now will overwrite current encrypted value');
+        } catch (\Defuse\Crypto\Exception\CannotPerformOperationException $ex) {
+            $this->addFlash('Cannot safely perform decryption - Editing now will overwrite current encrypted value');
+        }
         return $plainPass;
     }
 
@@ -176,15 +188,16 @@ class DefaultController extends Controller
         );
         $encryptedGroupKey = $usergroup->getGroupKey();
 
-        dump($user);
-        dump($group);
-        dump($usergroup);
-
         // Decrypt Group key with current users private key
         // TODO check return
-        openssl_private_decrypt($encryptedGroupKey, $groupKey, $privKey);
-        $groupKey = Key::LoadFromAsciiSafeString($groupKey);
-        return $groupKey;
+        if (openssl_private_decrypt($encryptedGroupKey, $groupKey, $privKey)) {
+            $groupKey = Key::LoadFromAsciiSafeString($groupKey);
+            return $groupKey;
+        } else {
+            // TODO catch this upstream?
+            throw new \Exception("Unable to decode group key for current user");
+        }
+
     }
 
 
@@ -217,6 +230,12 @@ class DefaultController extends Controller
                 $form->get('plainPassword')->getData(),
                 $this->get('security.token_storage')->getToken()->getUser()
             );
+
+            $this->addFlash(
+                'info',
+                strlen($encryptedPassword)
+            );
+
             $login->setPassword($encryptedPassword);
 
             $em = $this->getDoctrine()->getManager();
