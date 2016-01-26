@@ -1,6 +1,6 @@
 fos_user:
     email:
-        already_used: fos_user.email.already_used   # FIXME
+        already_used: 'Email address already registered'   # FIXME
         blank: fos_user.email.blank   # FIXME
         invalid: fos_user.email.invalid   # FIXME
         long: fos_user.email.long   # FIXME

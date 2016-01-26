@@ -39,12 +39,12 @@ class User extends BaseUser implements ThemeUser
     protected $groups;
 
     /**
-     * @ORM\Column(name="pubKey", type="string", length=500)
+     * @ORM\Column(name="pubKey", type="string", length=500, nullable=true)
      */
     protected $pubKey;
 
     /**
-     * @ORM\Column(name="privateKey", type="string", length=2000)
+     * @ORM\Column(name="privateKey", type="string", length=2000, nullable=true)
      */ 
     protected $privateKey;
 
@@ -179,5 +179,21 @@ class User extends BaseUser implements ThemeUser
     }
     public function getTitle() {
         return null;
+    }
+
+    /* Override FOSUB */
+    public function setEmail($email)
+    {
+        parent::setEmail($email);
+        $this->username = $email;
+
+        return $this;
+    }
+    public function setEmailCanonical($emailCanonical)
+    {
+        parent::setEmailCanonical($emailCanonical);
+        $this->usernameCanonical = $emailCanonical;
+
+        return $this;
     }
 }

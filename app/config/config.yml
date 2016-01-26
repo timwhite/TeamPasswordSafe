@@ -77,3 +77,13 @@ fos_user:
     user_class: AppBundle\Entity\User
     group:
         group_class: AppBundle\Entity\Groups
+
+    registration:
+        form:
+            type: AppBundle\Form\RegistrationType
+            validation_groups: [AcmeRegistration]
+
+    profile:
+        form:
+            type: AppBundle\Form\ProfileType
+            validation_groups: [AcmePorfile]
