@@ -1,6 +1,16 @@
+parameters:
+    appbundle.menu_listener.class: AppBundle\EventListener\MenuListener
+
+
 services:
     appbundle.foslistener:
         class: AppBundle\EventListener\FOSListener
         arguments: ['@router']
         tags:
             - { name: kernel.event_subscriber }
+
+    appbundle.menu_listener:
+        class: %appbundle.menu_listener.class%
+        arguments: [ '@translator', "@=service('security.token_storage').getToken().getUser()" ]
+        tags:
+            - { name: kernel.event_listener, event:theme.sidebar_setup_menu, method:onSetupMenu }

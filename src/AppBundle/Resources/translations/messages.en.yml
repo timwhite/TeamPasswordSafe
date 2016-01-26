@@ -4,3 +4,4 @@
 Login: Login   # FIXME
 'Login updated': 'Login updated'   # FIXME
 'Unable to decode encrypted password - Editing now will overwrite current encrypted value': 'Unable to decode encrypted password - Editing now will overwrite current encrypted value'   # FIXME
+'Password Groups': 'Password Groups'
