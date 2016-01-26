@@ -1,5 +1,7 @@
 parameters:
     appbundle.menu_listener.class: AppBundle\EventListener\MenuListener
+    appbundle.show_user_listener.class: AppBundle\EventListener\ShowUserListener
+
 
 
 services:
@@ -14,3 +16,9 @@ services:
         arguments: [ '@translator', "@=service('security.token_storage').getToken().getUser()" ]
         tags:
             - { name: kernel.event_listener, event:theme.sidebar_setup_menu, method:onSetupMenu }
+
+    appbundle.show_user_listener:
+        class: %appbundle.show_user_listener.class%
+        arguments: [ '@translator', "@=service('security.token_storage').getToken().getUser()" ]
+        tags:
+            - { name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser}

@@ -14,6 +14,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 class MenuListener {
 
     protected $translator;
+    protected $current_user;
 
     public function __construct(TranslatorInterface $translator, User $user)
     {

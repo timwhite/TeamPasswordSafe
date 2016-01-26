@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\Common\Collections\Criteria;
 use AppBundle\Entity\UserGroup;
-
+use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
 
 /**
  * User
@@ -14,7 +14,7 @@ use AppBundle\Entity\UserGroup;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User extends BaseUser
+class User extends BaseUser implements ThemeUser
 {
     /**
      * @var int
@@ -161,5 +161,23 @@ class User extends BaseUser
         $criteria->where(Criteria::expr()->neq('groupKey', null));
 
         return $this->getGroups()->matching($criteria);
+    }
+
+
+    public function getAvatar() {
+        return 'https://secure.gravatar.com/avatar/' . md5( trim( $this->getEmailCanonical() ) ) . '?d=retro';
+    }
+    public function getMemberSince()
+    {
+        return null;
+    }
+    public function isOnline() {
+        return null;
+    }
+    public function getIdentifier() {
+        return null;
+    }
+    public function getTitle() {
+        return null;
     }
 }
