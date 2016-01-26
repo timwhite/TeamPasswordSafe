@@ -93,40 +93,20 @@
 
             <!-- Flash Messages -->
             {% block flash_messages %}
-                <div class="row">
-                    {% for flashMessage in app.session.flashbag.get('error') %}
-                        <div class="alert alert-danger fade in col-md-offset-2 col-md-8" role="alert">
-                            <button class="close" data-dismiss="alert"><i class="glyphicon glyphicon-remove-circle"></i>
-                            </button>
-                            <i class="fa fa-exclamation-triangle"></i>
-                            {{ flashMessage }}
-                        </div>
+                {% if app.request.hasPreviousSession %}
+                    <div class="row">
+                    {% for type, messages in app.session.flashbag.all() %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ type }} fade in col-md-offset-2 col-md-8" role="alert">
+                                <button class="close" data-dismiss="alert"><i class="glyphicon glyphicon-remove-circle"></i>
+                                </button>
+                                <i class="fa fa-exclamation-triangle"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     {% endfor %}
-                    {% for flashMessage in app.session.flashbag.get('warning') %}
-                        <div class="alert alert-warning fade in col-md-offset-2 col-md-8" role="alert">
-                            <button class="close" data-dismiss="alert"><i class="glyphicon glyphicon-remove-circle"></i>
-                            </button>
-                            <i class="fa fa-exclamation-triangle"></i>
-                            {{ flashMessage }}
-                        </div>
-                    {% endfor %}
-                    {% for flashMessage in app.session.flashbag.get('info') %}
-                        <div class="alert alert-info fade in col-md-offset-2 col-md-8" role="alert">
-                            <button class="close" data-dismiss="alert"><i class="glyphicon glyphicon-remove-circle"></i>
-                            </button>
-                            <i class="fa fa-exclamation-triangle"></i>
-                            {{ flashMessage }}
-                        </div>
-                    {% endfor %}
-                    {% for flashMessage in app.session.flashbag.get('success') %}
-                        <div class="alert alert-success fade in col-md-offset-2 col-md-8" role="alert">
-                            <button class="close" data-dismiss="alert"><i class="glyphicon glyphicon-remove-circle"></i>
-                            </button>
-                            <i class="fa fa-exclamation-triangle"></i>
-                            {{ flashMessage }}
-                        </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endif %}
             {% endblock %}
 
 
