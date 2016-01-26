@@ -28,6 +28,7 @@ class FOSListener implements EventSubscriberInterface
         return array(
             //FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
             SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
+            FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'onPasswordChange',
         );
     }
 
@@ -38,6 +39,25 @@ class FOSListener implements EventSubscriberInterface
         //$user->setLastLogin(new \DateTime());
         //$this->userManager->updateUser($user);
     }*/
+
+    public function onPasswordChange(FormEvent $event)
+    {
+        // Get new password
+        /** @var User $user */
+        $user = $event->getForm()->getData();
+        $password = $user->getPlainPassword();
+        // Get pkey from session
+        $privKey = $event->getRequest()->getSession()->get('pkey');
+        // Secure pkey with new password
+        $res = openssl_pkey_get_private($privKey);
+        openssl_pkey_export($res, $privKey, $password);
+        // Store pkey in user
+        $user->setPrivateKey($privKey);
+
+        unset($password);
+        openssl_pkey_free($res);
+        unset($privKey);
+    }
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
