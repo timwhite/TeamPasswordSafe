@@ -13,42 +13,51 @@ Logins
 {% endblock %}
 
 {% block page_content %}
-<div class="row">
-    {% for login in group.logins %}
-        <div class="col-sm-4">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><a href="{{ path('edit_login', {'loginid': login.id}) }}">{{ login.name }}</a></h3>
-                    <div class="box-body">
-                        {{ login.notes }}
+    <div class="row">
+        <div class="col-sm-12">
 
-                        </ul>
+            <div class="row">
+                {% for login in group.logins %}
+                    <div class="col-sm-6">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-blue"><i class="fa fa-star-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text"><a href="{{ path('edit_login', {'loginid': login.id}) }}">{{ login.name }}</a></span>
+                                <span class="info-box-more">
+                                    <strong>Username:</strong> {{ login.username }}<br/>
+                                    <strong>Url:</strong> {{ login.url }}
+                                </span>
+                                <span class="info-box-more">
+                                    {{ login.notes }}
+                                </span>
+
+                            </div>
+                        </div>
                     </div>
 
-                </div>
+                {% endfor %}
+                <a class="fab bg-green" href="{{ path('new_login', { 'groupname': group.name }) }}"><i style="" class="fa fa-plus"></i></a>
+                <style>
+                    .fab {
+                        display: inline-block;
+                        border:none;
+                        font-size:1.5em;
+                        color:white;
+                        border-radius: 50%;
+                        width: 50px;
+                        height: 50px;
+                        margin: auto;
+                        -webkit-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
+                        -moz-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
+                        box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
+                        line-height: 50px;
+                        text-align: center;
+                        vertical-align: bottom;
+                    }
+
+                </style>
             </div>
         </div>
+    </div>
 
-    {% endfor %}
-    <a class="fab bg-green" href="{{ path('new_login', { 'groupname': group.name }) }}"><i style="" class="fa fa-plus"></i></a>
-<style>
-    .fab {
-        display: inline-block;
-        border:none;
-        font-size:1.5em;
-        color:white;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        margin: auto;
-        -webkit-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-        -moz-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-        box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-        line-height: 50px;
-        text-align: center;
-        vertical-align: bottom;
-    }
-
-</style>
-</div>
 {% endblock %}
