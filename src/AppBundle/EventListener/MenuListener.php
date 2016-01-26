@@ -16,10 +16,12 @@ class MenuListener {
     protected $translator;
     protected $current_user;
 
-    public function __construct(TranslatorInterface $translator, User $user)
+    public function __construct(TranslatorInterface $translator, $user)
     {
         $this->translator = $translator;
-        $this->current_user = $user;
+        if($user instanceof User) {
+            $this->current_user = $user;
+        }
     }
 
     public function onSetupMenu(SidebarMenuEvent $event) {
@@ -41,28 +43,30 @@ class MenuListener {
 
         /** @var Groups $group */
         /** @var UserGroup $usergroup */
-        foreach($this->current_user->getGroupsWithKeys() as $usergroup)
-        {
-            $group = $usergroup->getGroup();
+        if($this->current_user) {
+            foreach ($this->current_user->getGroupsWithKeys() as $usergroup) {
+                $group = $usergroup->getGroup();
+                $groups->addChild(
+                    new MenuItemModel(
+                        'group_' . $group->getId(),
+                        $group->getName(),
+                        'logins',
+                        ['groupname' => $group->getName()],
+                        ''
+                    )
+                );
+            }
+
             $groups->addChild(
                 new MenuItemModel(
-                    'group_'.$group->getId(),
-                    $group->getName(),
-                    'logins',
-                    ['groupname' => $group->getName()],
-                    ''
-                     ));
+                    'new_group',
+                    $this->translator->trans('New Group'),
+                    'new_group',
+                    [],
+                    'fa fa-plus'
+                )
+            );
         }
-
-        $groups->addChild(
-            new MenuItemModel(
-                'new_group',
-                $this->translator->trans('New Group'),
-                'new_group',
-                [],
-                'fa fa-plus'
-            )
-        );
 /*
  *
         // Add some children

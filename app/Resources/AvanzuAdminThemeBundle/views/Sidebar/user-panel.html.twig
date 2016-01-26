@@ -5,7 +5,7 @@
         {{ macro.avatar(user.avatar, user.username)  }}
     </div>
     <div class="pull-left info">
-        <p>{{ user.name }}</p>
+        <p><a href="{{ path('fos_user_profile_show') }}">{{ user.name }}</a></p>
 
 
     </div>

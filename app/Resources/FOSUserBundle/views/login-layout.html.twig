@@ -1,6 +1,22 @@
-{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+{% extends 'AvanzuAdminThemeBundle:layout:login-layout.html.twig' %}
 
 {% block page_content %}
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <a href="{{ path('fos_user_profile_show') }}">
+        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</a> |
+        <a href="{{ path('fos_user_security_logout') }}">
+            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+        </a>
+    {% else %}
+        <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+    {% endif %}
+</div>
+
+<div class="login-box">
+<div class="login-logo">
+    <a href="{{ path('homepage') }}"><b>Team</b>PasswordSafe</a>
+</div><!-- /.login-logo -->
+    <div class="login-box-body">
         <!-- Flash Messages -->
     {% block flash_messages %}
         {% if app.request.hasPreviousSession %}
@@ -18,24 +34,8 @@
             </div>
         {% endif %}
     {% endblock %}
-
-<div class="row">
-    <div class="col-sm-12">
-        <div class="box">
-            <div class="box-header with-border">
-                {% block box_header %}
-                {% endblock %}
-            </div>
-            <div class="box-body">
     {% block fos_user_content %}
     {% endblock fos_user_content %}
-            </div>
-        </div>
     </div>
 </div>
-
-
 {% endblock %}
-
-{% block page_title %}{% endblock %}
-{% block page_subtitle %}{% endblock %}

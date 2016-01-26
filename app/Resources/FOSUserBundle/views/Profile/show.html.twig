@@ -1,0 +1,17 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+{% include "FOSUserBundle:Profile:show_content.html.twig" %}
+{% endblock fos_user_content %}
+
+{% block box_header %}
+    <h3 class="box-title">Profile</h3>
+    <div class="box-tools pull-right">
+        <a href="{{ path('fos_user_profile_edit') }}" class="btn btn-box-tool" data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>
+        <a href="{{ path('fos_user_change_password') }}" class="btn btn-box-tool" data-toggle="tooltip" title="Change Password"><i class="fa fa-key"></i></a>
+
+    </div><!-- /.box-tools -->
+{% endblock %}
+
+{% block page_title %}Profile{% endblock %}
+{% block page_subtitle %}{% endblock %}
