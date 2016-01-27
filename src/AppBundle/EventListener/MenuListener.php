@@ -51,7 +51,7 @@ class MenuListener {
                         'group_' . $group->getId(),
                         $group->getName(),
                         'logins',
-                        ['groupname' => $group->getName()],
+                        ['groupid' => $group->getId()],
                         ''
                     )
                 );

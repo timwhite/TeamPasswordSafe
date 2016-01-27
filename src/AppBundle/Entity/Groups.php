@@ -184,4 +184,9 @@ class Groups extends BaseGroup
     {
         return $this->description;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

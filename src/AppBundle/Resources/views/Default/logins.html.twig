@@ -32,7 +32,7 @@ Logins
                     </div>
 
                 {% endfor %}
-                <a class="fab bg-green" href="{{ path('new_login', { 'groupname': group.name }) }}"><i style="" class="fa fa-plus"></i></a>
+                <a class="fab bg-green" href="{{ path('new_login', { 'groupid': group.id }) }}"><i style="" class="fa fa-plus"></i></a>
                 <style>
                     .fab {
                         display: inline-block;

@@ -92,12 +92,22 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/group/{groupname}", name="logins")
+     * @Route("/group/{groupid}", name="logins")
      */
-    public function showLogins($groupname)
+    public function showLogins($groupid)
     {
         $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groups');
-        $group = $groupRepo->findOneByName($groupname); // TODO Make this only find groups you are a member of
+        $group = $groupRepo->findOneById($groupid); // TODO Make this only find groups you are a member of
+
+        if($group == null)
+        {
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans("You don't have access to this group")
+            );
+
+            return $this->redirectToRoute('groups');
+        }
 
         return $this->render('AppBundle:Default:logins.html.twig',
             ['group' => $group]
@@ -105,14 +115,25 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/group/{groupname}/new", name="new_login")
+     * @Route("/group/{groupid}/new", name="new_login")
      */
-    public function newLogin(Request $request, $groupname)
+    public function newLogin(Request $request, $groupid)
     {
         $login = new Login();
 
         $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groups');
-        $group = $groupRepo->findOneByName($groupname); // TODO Make this only find groups you are a member of
+        $group = $groupRepo->findOneById($groupid); // TODO Make this only find groups you are a member of
+
+        if($group == null)
+        {
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans("You don't have access to this group")
+            );
+
+            return $this->redirectToRoute('groups');
+        }
+
         $login->setGroup($group);
 
         $form = $this->createForm(LoginType::class, $login);
@@ -120,6 +141,7 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
+            $group = $login->getGroup();
             // With login, we need to encrypt the password to save it
             $encryptedPassword = $this->encryptLoginWithGroupKey(
                 $request,
@@ -132,7 +154,7 @@ class DefaultController extends Controller
             $em->persist($login);
 
             $em->flush();
-            return $this->redirectToRoute('logins', ['groupname' => $groupname] );
+            return $this->redirectToRoute('logins', ['groupid' => $group->getId()] );
         }
         return $this->render('AppBundle:Default:login.html.twig', [
             'form' => $form->createView()
@@ -253,7 +275,7 @@ class DefaultController extends Controller
                 $this->get('translator')->trans('Login updated')
             );
 
-            return $this->redirectToRoute('logins', ['groupname' => $login->getGroup()->getName()] );
+            return $this->redirectToRoute('logins', ['groupid' => $login->getGroup()->getId()] );
         }
         return $this->render('AppBundle:Default:login.html.twig', [
             'form' => $form->createView()

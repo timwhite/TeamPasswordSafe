@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,12 +19,19 @@ class LoginType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('group', EntityType::class, [
+                'class' => 'AppBundle\Entity\Groups',
+
+            ])
             ->add('name')
             ->add('url')
             ->add('username')
             ->add('plainPassword', TextType::class, [
                 'mapped' => false,
-                'attr' => ['maxlength' => 1024],
+                'attr' => [
+                    'maxlength' => 1024,
+                    'autocomplete' => 'off'
+                ],
                 'constraints' => [
                     new Length(['max' => 1024])
                 ]
