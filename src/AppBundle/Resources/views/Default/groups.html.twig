@@ -18,9 +18,10 @@ Groups
                         <hr>
                         <ul>
                         {% for user in group.users %}
-                            <li>{{ user.user.name }}</li>
+                            <li data-toggle="tooltip" title="{{ user.user.email }}">{{ user.user.name }}</li>
                         {% endfor %}
                         </ul>
+                        <a href="{{ path('add_user_group', {'groupid': group.id}) }}"><i class="fa fa-plus"></i> {% trans %}Add User To Group{% endtrans %}</a>
                     </div>
 
                 </div>

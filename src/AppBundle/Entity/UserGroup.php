@@ -3,12 +3,16 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * UserGroup
  *
- * @ORM\Table(name="user_group")
+ * @ORM\Table(name="user_group", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="user_group_idx", columns={"user_id", "group_id"})
+ *     })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserGroupRepository")
+ * @UniqueEntity({"user", "group"})
  */
 class UserGroup
 {
