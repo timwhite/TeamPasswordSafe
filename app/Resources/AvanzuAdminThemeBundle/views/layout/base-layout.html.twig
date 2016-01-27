@@ -139,6 +139,36 @@
 
 {# ----------------------------------------------------------------------------------------------- JAVASCRIPTS_INLINE #}
 {% block javascripts_inline %}
+        <script>
+            $('#search').keyup(function() {
+
+                searchText = $(this).val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('liveSearch') }}",
+                    dataType: "json",
+                    data: {searchText : searchText},
+                    success : function(response)
+                    {
+                        console.log(response);
+                        var cList = $('<ul/>');
+                        $.each(response, function(i) {
+                            var li = $('<li/>')
+                                    .addClass('ui-menu-item')
+                                    .attr('role', 'menuitem')
+                                    .appendTo(cList);
+                            var aaa = $('<a/>')
+                                    .addClass('ui-all')
+                                    .text(this.name)
+                                    .attr('href', this._links.edit.href)
+                                    .appendTo(li);
+                        });
+                        $("#search_results").html(cList);
+                    }
+                });
+            });
+        </script>
 {% endblock %}
 </body>
 </html>

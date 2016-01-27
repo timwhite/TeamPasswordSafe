@@ -4,12 +4,25 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * Login
  *
  * @ORM\Table(name="login")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\LoginRepository")
+ *
+ * @Serializer\XmlRoot("login")
+ * @Serializer\ExclusionPolicy("all")
+ *
+ * @Hateoas\Relation(
+ *     "edit",
+ *     href = @Hateoas\Route(
+ *       "edit_login",
+ *       parameters = { "loginid" = "expr(object.getId())" }
+ *     )
+ * )
  */
 class Login
 {
@@ -19,11 +32,13 @@ class Login
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Serializer\Expose()
      */
     private $id;
 
     /**
      * @var string
+     * @Serializer\Expose()
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
@@ -31,6 +46,7 @@ class Login
 
     /**
      * @var string
+     * @Serializer\Expose()
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
@@ -38,6 +54,7 @@ class Login
 
     /**
      * @var string
+     * @Serializer\Expose()
      *
      * @ORM\Column(name="username", type="string", length=255, nullable=true)
      */
@@ -56,6 +73,7 @@ class Login
 
     /**
      * @var string
+     * @Serializer\Expose()
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
      */

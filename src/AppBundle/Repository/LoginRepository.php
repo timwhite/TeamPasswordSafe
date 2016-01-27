@@ -10,4 +10,12 @@ namespace AppBundle\Repository;
  */
 class LoginRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByLetters($string)
+    {
+        return $this->getEntityManager()->createQuery('SELECT l FROM AppBundle:Login l
+                WHERE l.name LIKE :string
+                 OR l.url LIKE :string')
+            ->setParameter('string','%'.$string.'%')
+            ->getResult();
+    }
 }

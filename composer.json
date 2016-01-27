@@ -32,7 +32,8 @@
         "symfony/assetic-bundle": "^2.7",
         "defuse/php-encryption": "2.0.x-dev",
         "jms/translation-bundle": "dev-master",
-        "egeloen/ordered-form-bundle": "^2.0"
+        "egeloen/ordered-form-bundle": "^2.0",
+        "willdurand/hateoas-bundle": "^1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

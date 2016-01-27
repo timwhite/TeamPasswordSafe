@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class UserGroupRepository extends \Doctrine\ORM\EntityRepository
 {
+
 }
