@@ -37,7 +37,7 @@ class LoginType extends AbstractType
                 ]
             ])
             ->add('notes')
-            ->add('save', SubmitType::class, array('label' => 'Create Login'))
+            ->add('save', SubmitType::class, array('label' => 'Update Login'))
         ;
     }
     
