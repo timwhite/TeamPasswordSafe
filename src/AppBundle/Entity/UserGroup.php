@@ -45,6 +45,11 @@ class UserGroup
     private $group;
 
     /**
+     * @ORM\Column(name="adminAccess", type="boolean")
+     */
+    private $adminAccess = false;
+
+    /**
      * Get id
      *
      * @return int
@@ -131,5 +136,29 @@ class UserGroup
 
     public function getRoles() {
         return ['ROLE_USER'];
+    }
+
+    /**
+     * Set adminAccess
+     *
+     * @param boolean $adminAccess
+     *
+     * @return UserGroup
+     */
+    public function setAdminAccess($adminAccess)
+    {
+        $this->adminAccess = $adminAccess;
+
+        return $this;
+    }
+
+    /**
+     * Get adminAccess
+     *
+     * @return boolean
+     */
+    public function getAdminAccess()
+    {
+        return $this->adminAccess;
     }
 }

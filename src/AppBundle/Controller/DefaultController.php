@@ -53,6 +53,7 @@ class DefaultController extends Controller
             $usergroup = new UserGroup();
             $usergroup->setGroup($group);
             $usergroup->setUser($currentuser);
+            $usergroup->setAdminAccess(true);
 
             // Generate a key for this group
             $usergroup->setGroupKey($this->encryptGroupKeyForUser($currentuser));
@@ -111,6 +112,8 @@ class DefaultController extends Controller
     {
         $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groups');
         $group = $groupRepo->findOneById($groupid); // TODO Make this only find groups you are a member of
+
+        $this->denyAccessUnlessGranted('view', $group);
 
         if($group == null)
         {

@@ -8,7 +8,7 @@ Groups
 <div class="row">
     {% for usergroup in usergroups %}
         {% set group=usergroup.group %}
-        <div class="col-sm-4">
+        <div class="col-sm-6">
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title"><a href="{{ path('logins', {'groupid': group.id}) }}">{{ group.name }}</a></h3>
@@ -16,12 +16,23 @@ Groups
                         {{ group.description }}
 
                         <hr>
-                        <ul>
+                        <h4>{% trans %}Group Members{% endtrans %}</h4>
+                        <ul class="list-group">
                         {% for user in group.users %}
-                            <li data-toggle="tooltip" title="{{ user.user.email }}">{{ user.user.name }}</li>
+                            <li class="list-group-item" data-toggle="tooltip" title="{{ user.user.email }}">
+
+                                {% if user.adminAccess %}
+                                    <span class="badge">Admin</span>
+                                {% endif %}
+                                <img src="{{ user.user.avatar }}&s=50" class="img-rounded "/>
+                                {{ user.user.name }}</li>
                         {% endfor %}
-                        </ul>
+                        {% if is_granted('admin', group) %}
+                        <li class="list-group-item">
                         <a href="{{ path('add_user_group', {'groupid': group.id}) }}"><i class="fa fa-plus"></i> {% trans %}Add User To Group{% endtrans %}</a>
+                        </li>
+                        {% endif %}
+                        </ul>
                     </div>
 
                 </div>

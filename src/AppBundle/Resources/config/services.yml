@@ -27,3 +27,10 @@ services:
         arguments: [ '@translator', "@=service('security.token_storage').getToken().getUser()" ]
         tags:
             - { name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser}
+
+    appbundle.group_voter:
+        class: AppBundle\Security\GroupVoter
+        arguments: [ '@doctrine.orm.entity_manager' ]
+        tags:
+            - { name: security.voter }
+        public: false
