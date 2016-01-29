@@ -28,8 +28,4 @@ class SearchController extends Controller
 
     }
 
-    public function liveSearchUserNotInGroup(Request $request)
-    {
-
-    }
 }
