@@ -142,6 +142,7 @@ class User extends BaseUser implements ThemeUser
 
 
     /**
+     * @deprecated as all UserGroup relations can not have a null groupKey
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getGroupsWithoutKeys()
@@ -153,6 +154,7 @@ class User extends BaseUser implements ThemeUser
     }
 
     /**
+     * @deprecated as all UserGroup relations can not have a null groupKey
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getGroupsWithKeys()

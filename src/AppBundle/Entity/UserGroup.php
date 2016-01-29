@@ -28,7 +28,7 @@ class UserGroup
     /**
      * @var string
      *
-     * @ORM\Column(name="groupKey", type="string", length=1024, nullable=true)
+     * @ORM\Column(name="groupKey", type="string", length=1024, nullable=false)
      */
     private $groupKey;
 

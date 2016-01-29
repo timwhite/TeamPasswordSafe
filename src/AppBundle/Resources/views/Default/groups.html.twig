@@ -24,6 +24,7 @@ Groups
                                 {% if user.adminAccess %}
                                     <span class="badge">Admin</span>
                                 {% endif %}
+
                                 <img src="{{ user.user.avatar }}&s=50" class="img-rounded "/>
                                 {{ user.user.name }}</li>
                         {% endfor %}

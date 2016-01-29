@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Repository\GroupsRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
@@ -18,10 +19,13 @@ class LoginType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var GroupsRepository $group_repo */
+        $group_repo = $options['groups_repository'];
+
         $builder
             ->add('group', EntityType::class, [
                 'class' => 'AppBundle\Entity\Groups',
-
+                'choices' => $group_repo->getByUser($options['current_user'])
             ])
             ->add('name')
             ->add('url')
@@ -49,5 +53,9 @@ class LoginType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Login'
         ));
+        $resolver->setRequired([
+            'current_user',
+            'groups_repository'
+        ]);
     }
 }

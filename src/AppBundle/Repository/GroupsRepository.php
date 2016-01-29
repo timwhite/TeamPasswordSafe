@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\User;
+
 /**
  * GroupsRepository
  *
@@ -10,4 +12,19 @@ namespace AppBundle\Repository;
  */
 class GroupsRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getByUser(User $user)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('g')
+            ->from('AppBundle:Groups', 'g')
+            ->join('AppBundle:UserGroup', 'j')
+            ->where('g.id = j.group')
+            ->andWhere('j.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery();
+
+        dump($query->getSQL());
+
+        return $query->getResult();
+    }
 }

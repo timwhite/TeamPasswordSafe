@@ -68,7 +68,7 @@ class GroupVoter extends Voter
         $criteria = Criteria::create();
         $criteria->where(Criteria::expr()->eq('group', $group));
 
-        $user_group = $user->getGroupsWithKeys()->matching($criteria);
+        $user_group = $user->getGroups()->matching($criteria);
         if (sizeof($user_group)) {
             return true;
         }
@@ -84,7 +84,7 @@ class GroupVoter extends Voter
         $criteria->where(Criteria::expr()->eq('group', $group));
         $criteria->andWhere(Criteria::expr()->eq('adminAccess', true));
 
-        $user_group = $user->getGroupsWithKeys()->matching($criteria);
+        $user_group = $user->getGroups()->matching($criteria);
 
         if (sizeof($user_group)) {
             return true;

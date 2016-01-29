@@ -140,9 +140,9 @@ class DefaultController extends Controller
         $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groups');
         $group = $groupRepo->findOneById($groupid);
 
-        $this->denyAccessUnlessGranted('view', $group);
+        //$this->denyAccessUnlessGranted('view', $group);
 
-        if($group == null)
+        if($group == null || !$this->isGranted('view', $group))
         {
             $this->addFlash(
                 'error',
@@ -154,7 +154,10 @@ class DefaultController extends Controller
 
         $login->setGroup($group);
 
-        $form = $this->createForm(LoginType::class, $login);
+        $form = $this->createForm(LoginType::class, $login, [
+            'groups_repository' => $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Groups'),
+            'current_user' => $this->get('security.token_storage')->getToken()->getUser()
+        ]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
@@ -260,7 +263,12 @@ class DefaultController extends Controller
         /** @var Login $login */
         $login = $loginRepo->findOneById($loginid);
 
-        $form = $this->createForm(LoginType::class, $login);
+        $this->denyAccessUnlessGranted('view', $login->getGroup());
+
+        $form = $this->createForm(LoginType::class, $login, [
+            'groups_repository' => $this->getDoctrine()->getEntityManager()->getRepository('AppBundle:Groups'),
+            'current_user' => $this->get('security.token_storage')->getToken()->getUser()
+        ]);
 
         // Current password is encrypted, lets get the plain text version
         $plainPassword = $this->decryptLoginWithGroupKey(
