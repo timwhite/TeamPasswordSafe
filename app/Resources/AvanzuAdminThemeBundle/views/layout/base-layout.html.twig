@@ -15,6 +15,25 @@
     {# -------------------------------------------------------------------------------------------------- STYLESHEETS #}
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('bundles/avanzuadmintheme/static/'~ app.environment ~'/styles/admin-lte-all.css') }}" />
+
+        <style>
+            #search_results {
+                display: none;
+                position: absolute;
+                z-index: 1000;
+                visibility: visible;
+                opacity: 1;
+                padding: 4px 0 6px;
+
+                left: 10px;
+                right: 10px;
+                border: 1px solid;
+
+                background: white;
+
+            }
+
+        </style>
     {% endblock %}
 
 
@@ -144,6 +163,12 @@
 
                 searchText = $(this).val();
 
+                if(searchText.trim() == '')
+                {
+                    $("#search_results").hide();
+                    return false;
+                }
+
                 $.ajax({
                     type: "POST",
                     url: "{{ path('liveSearch') }}",
@@ -151,8 +176,8 @@
                     data: {searchText : searchText},
                     success : function(response)
                     {
-                        console.log(response);
-                        var cList = $('<ul/>');
+                        var cList = $('<ul class=""  />');
+
                         $.each(response, function(i) {
                             var li = $('<li/>')
                                     .addClass('ui-menu-item')
@@ -164,7 +189,16 @@
                                     .attr('href', this._links.edit.href)
                                     .appendTo(li);
                         });
-                        $("#search_results").html(cList);
+                        if(response.length == 0)
+                        {
+                            var li = $('<li>No results found</li>')
+                                    .addClass('ui-menu-item')
+                                    .attr('role', 'menuitem')
+                                    .appendTo(cList);
+                        }
+                        $("#search_results").html(cList).show();
+
+
                     }
                 });
             });

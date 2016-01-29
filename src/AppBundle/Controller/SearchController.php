@@ -27,4 +27,9 @@ class SearchController extends Controller
         return new Response($json);
 
     }
+
+    public function liveSearchUserNotInGroup(Request $request)
+    {
+
+    }
 }
