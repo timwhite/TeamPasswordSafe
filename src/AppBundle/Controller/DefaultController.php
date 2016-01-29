@@ -111,7 +111,7 @@ class DefaultController extends Controller
     public function showLogins($groupid)
     {
         $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groups');
-        $group = $groupRepo->findOneById($groupid); // TODO Make this only find groups you are a member of
+        $group = $groupRepo->findOneById($groupid);
 
         $this->denyAccessUnlessGranted('view', $group);
 
@@ -138,7 +138,9 @@ class DefaultController extends Controller
         $login = new Login();
 
         $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Groups');
-        $group = $groupRepo->findOneById($groupid); // TODO Make this only find groups you are a member of
+        $group = $groupRepo->findOneById($groupid);
+
+        $this->denyAccessUnlessGranted('view', $group);
 
         if($group == null)
         {
