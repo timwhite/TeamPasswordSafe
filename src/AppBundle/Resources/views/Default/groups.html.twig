@@ -97,7 +97,7 @@ Groups
                     searchText : searchText},
                 success : function(response)
                 {
-                    var add_user_group_url = '{{ path("add_user_group2", {'groupid': 'GROUP_ID', 'userid': 'USER_ID'}) }}';
+                    var add_user_group_url = '{{ path("add_user_group", {'groupid': 'GROUP_ID', 'userid': 'USER_ID'}) }}';
                     add_user_group_url =  add_user_group_url.replace('GROUP_ID', $(this).data('groupid'));
                     var cList = $('<ul class=""  />');
 
