@@ -19,14 +19,23 @@ Groups
                         <h4>{% trans %}Group Members{% endtrans %}</h4>
                         <ul class="list-group">
                         {% for user in group.users %}
-                            <li class="list-group-item" data-toggle="tooltip" title="{{ user.user.email }}">
+                            <li class="list-group-item" >
 
                                 {% if user.adminAccess %}
                                     <span class="badge">Admin</span>
                                 {% endif %}
 
+
+                                <span data-toggle="tooltip" title="{{ user.user.email }}">
                                 <img src="{{ user.user.avatar }}&s=50" class="img-rounded "/>
-                                {{ user.user.name }}</li>
+                                {{ user.user.name }}
+                                </span>
+                                {% if user.user != app.user and is_granted('admin', group) %}
+                                    <div class="box-tools pull-right">
+                                        <a class="btn btn-box-tool" title="{% trans %}Remove user from group{% endtrans %}" data-toggle="tooltip" href="{{ path('remove_user_group', {'groupid': group.id, 'userid': user.user.id}) }}" onclick="return confirm('{% trans %}Are you sure you want to remove this user from the group?{% endtrans %}');"><i class="fa fa-times"></i></a>
+                                    </div><!-- /.box-tools -->
+                                {% endif %}
+                            </li>
                         {% endfor %}
                         {% if is_granted('admin', group) %}
                         <li class="list-group-item">

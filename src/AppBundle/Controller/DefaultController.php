@@ -259,7 +259,7 @@ class DefaultController extends Controller
      */
     public function editLogin(Request $request, $loginid)
     {
-        $loginRepo = $groupRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Login');
+        $loginRepo = $this->getDoctrine()->getManager()->getRepository('AppBundle:Login');
         /** @var Login $login */
         $login = $loginRepo->findOneById($loginid);
 
@@ -339,5 +339,59 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:addUserGroup.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/group/{groupid}/removeuser/{userid}", name="remove_user_group")
+     */
+    public function removeUserGroup($groupid, $userid)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $groupRepo = $em->getRepository('AppBundle:Groups');
+        /** @var Groups $login */
+        $group = $groupRepo->findOneById($groupid);
+
+        $this->denyAccessUnlessGranted('admin', $group);
+
+        $userRepo = $em->getRepository('AppBundle:User');
+        /** @var User $user */
+        $user = $userRepo->findOneById($userid);
+
+        if ($user == $this->get('security.token_storage')->getToken()->getUser())
+        {
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans(
+                    'Cannot remove self from group'
+                )
+            );
+
+            return $this->redirectToRoute('groups');
+        }
+
+        $userGroupRepo = $em->getRepository('AppBundle:UserGroup');
+        $userGroup = $userGroupRepo->findOneBy(['user' => $user, 'group' => $group]);
+
+        if(!$userGroup) {
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans(
+                    'User is not a member of that group'
+                )
+            );
+
+            return $this->redirectToRoute('groups');
+        }
+
+        $em->remove($userGroup);
+        $em->flush();
+
+        $this->addFlash(
+            'success',
+            $this->get('translator')->trans(
+                'Removed user from group'
+            )
+        );
+        return $this->redirectToRoute('groups');
     }
 }
