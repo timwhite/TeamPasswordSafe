@@ -7,17 +7,35 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\Common\Collections\Criteria;
 use AppBundle\Entity\UserGroup;
 use Avanzu\AdminThemeBundle\Model\UserInterface as ThemeUser;
+use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
+
 
 /**
  * User
  *
+ *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ *
+ * @Serializer\XmlRoot("user")
+ * @Serializer\ExclusionPolicy("all")
+ *
+ * @Hateoas\Relation(
+ *     "edit",
+ *     href = @Hateoas\Route(
+ *       "edit_login",
+ *       parameters = { "loginid" = "expr(object.getId())" }
+ *     )
+ * )
+ *
  */
 class User extends BaseUser implements ThemeUser
 {
     /**
      * @var int
+     *
+     * @Serializer\Expose()
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -27,6 +45,7 @@ class User extends BaseUser implements ThemeUser
 
     /**
      * @ORM\Column(name="name", type="string", length=255)
+     * @Serializer\Expose()
      */
 
     protected $name;
@@ -34,6 +53,9 @@ class User extends BaseUser implements ThemeUser
 
     /**
      * @ORM\OneToMany(targetEntity="UserGroup", mappedBy="user", fetch="EAGER")
+     *
+     * @Serializer\Exclude()
+     *
      */
 
     protected $groups;

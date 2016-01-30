@@ -28,4 +28,25 @@ class SearchController extends Controller
 
     }
 
+    /**
+     * @Route("/search/usersNotInGroup", name="usersNotInGroupSearch")
+     */
+    public function usersNotInGroup(Request $request)
+    {
+        if (! $request->isXmlHttpRequest()) {
+            return new Response('This is not an Ajax request', 400);
+        }
+        $groupid = $request->get('groupId');
+        $search = $request->get('searchText');
+        $users = $this->getDoctrine()
+            ->getRepository('AppBundle:User')
+            ->findByNotInGroup($groupid, $search);
+
+        // TODO https://github.com/schmittjoh/JMSSerializerBundle/issues/100 Serializer currently exposes more than we want it to
+
+        $json = $this->container->get('jms_serializer')->serialize($users, 'json');
+        return new Response($json);
+
+    }
+
 }

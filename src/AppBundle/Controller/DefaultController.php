@@ -8,7 +8,6 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\UserGroup;
 use AppBundle\Form\GroupsType;
 use AppBundle\Form\LoginType;
-use AppBundle\Form\UserGroupType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -309,36 +308,75 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/group/{groupid}/adduser", name="add_user_group")
+     * @Route("/group/{groupid}/adduser/{userid}", name="add_user_group")
      */
-    public function addUserGroup(Request $request) {
-        $usergroup = new UserGroup();
-        $form = $this->createForm(UserGroupType::class, $usergroup);
+    public function addUserGroup(Request $request, $groupid, $userid)
+    {
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
+        $groupRepo = $em->getRepository('AppBundle:Groups');
+        /** @var Groups $login */
+        $group = $groupRepo->findOneById($groupid);
 
-            // If we have a public key available for the user we are adding, then we need to get the group password and encrypt it for that user
-            if($usergroup->getUser()->getPubKey())
-            {
-                // Get current group key using existing user
-                $groupKey = $this->getGroupKey($request, $usergroup->getGroup(), $this->get('security.token_storage')->getToken()->getUser());
+        $this->denyAccessUnlessGranted('admin', $group);
 
-                // Encrypt key using the user we are adding
-                $usergroup->setGroupKey($this->encryptGroupKeyForUser($usergroup->getUser(), $groupKey));
-                unset($groupKey);
-            }
+        $userRepo = $em->getRepository('AppBundle:User');
+        /** @var User $user */
+        $user = $userRepo->findOneById($userid);
 
-            $em->persist($usergroup);
+        if (!$user) {
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans(
+                    'Unable to find user'
+                )
+            );
 
-            $em->flush();
             return $this->redirectToRoute('groups');
         }
-        return $this->render('AppBundle:Default:addUserGroup.html.twig', [
-            'form' => $form->createView()
-        ]);
+
+        $userGroupRepo = $em->getRepository('AppBundle:UserGroup');
+        $userGroup = $userGroupRepo->findOneBy(['user' => $user, 'group' => $group]);
+
+        if ($userGroup) {
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans(
+                    'User is already a member of that group'
+                )
+            );
+
+            return $this->redirectToRoute('groups');
+        }
+
+
+        $usergroup = new UserGroup();
+        $usergroup->setGroup($group);
+        $usergroup->setUser($user);
+
+        // Get current group key using existing user
+        $groupKey = $this->getGroupKey(
+            $request,
+            $usergroup->getGroup(),
+            $this->get('security.token_storage')->getToken()->getUser()
+        );
+
+        // Encrypt key using the user we are adding
+        $usergroup->setGroupKey($this->encryptGroupKeyForUser($user, $groupKey));
+        unset($groupKey);
+
+        $em->persist($usergroup);
+
+        $em->flush();
+
+        $this->addFlash(
+            'success',
+            $this->get('translator')->trans(
+                'User added to group'
+            )
+        );
+
+        return $this->redirectToRoute('groups');
     }
 
     /**

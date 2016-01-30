@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * UserGroup
@@ -13,6 +14,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserGroupRepository")
  * @UniqueEntity({"user", "group"})
+ *
+ * @Serializer\XmlRoot("usergroup")
+ * @Serializer\ExclusionPolicy("all")
+
  */
 class UserGroup
 {

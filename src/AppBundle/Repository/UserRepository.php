@@ -10,4 +10,20 @@ namespace AppBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByNotInGroup($groupid, $string = "")
+    {
+
+        return $this->getEntityManager()->createQuery('
+        SELECT u FROM AppBundle:User u
+        WHERE u NOT IN (
+        SELECT IDENTITY(j.user) FROM AppBundle:UserGroup j WHERE j.group = :group
+        )
+        AND
+          (u.name LIKE :string
+          OR u.email LIKE :string )
+                ')
+            ->setParameter('group',$groupid)
+            ->setParameter('string', '%'.$string.'%')
+            ->getResult();
+    }
 }
