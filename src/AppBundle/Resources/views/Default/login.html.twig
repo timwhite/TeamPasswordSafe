@@ -17,6 +17,8 @@ Login
                         {{ form_start(form) }}
                         {{ form_widget(form) }}
                         {{ form_end(form) }}
+                        <span class="generate_passwords">Generate Passwords</span>
+                        <div class="generate_results"></div>
                     </div>
 
                 </div>
@@ -25,4 +27,24 @@ Login
 
 
 </div>
+{% endblock %}
+
+{% block javascripts_inline %}
+    {{ parent() }}
+    <script>
+        $('.generate_passwords').click(function() {
+
+            $.ajax({
+                context: this,
+                type: "GET",
+                url: "{{ path('generateHumanPassword') }}",
+                dataType: "html",
+                success : function(response)
+                {
+                    $(this).next('.generate_results').html(response).show();
+                    return true;
+                }
+            });
+        });
+    </script>
 {% endblock %}
