@@ -10,6 +10,7 @@ use AppBundle\Form\GroupsType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\UserGroupType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use \Defuse\Crypto\Crypto;
@@ -311,7 +312,7 @@ class DefaultController extends Controller
     /**
      * @Route("/groupadduser", name="add_user_group")
      */
-    public function addUserGroup2(Request $request) {
+    public function addUserGroup(Request $request) {
 
         $usergroup = new UserGroup();
         $form = $this->createForm(UserGroupType::class, $usergroup);
@@ -343,8 +344,9 @@ class DefaultController extends Controller
 
     /**
      * @Route("/group/{groupid}/removeuser/{userid}", name="remove_user_group")
+     * @Method({"POST"})
      */
-    public function removeUserGroup($groupid, $userid)
+    public function removeUserGroup(Request $request, $groupid, $userid)
     {
         $em = $this->getDoctrine()->getManager();
         $groupRepo = $em->getRepository('AppBundle:Groups');
@@ -352,6 +354,11 @@ class DefaultController extends Controller
         $group = $groupRepo->findOneById($groupid);
 
         $this->denyAccessUnlessGranted('admin', $group);
+
+        if (!$this->isCsrfTokenValid('delete_user_from_group', $request->get('csrf_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token');
+        }
+
 
         $userRepo = $em->getRepository('AppBundle:User');
         /** @var User $user */
