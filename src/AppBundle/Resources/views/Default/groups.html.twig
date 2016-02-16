@@ -32,7 +32,11 @@ Groups
                                 </span>
                                 {% if user.user != app.user and is_granted('admin', group) %}
                                     <div class="box-tools pull-right">
-                                        <a class="btn btn-box-tool" title="{% trans %}Remove user from group{% endtrans %}" data-toggle="tooltip" href="{{ path('remove_user_group', {'groupid': group.id, 'userid': user.user.id}) }}" onclick="return confirm('{% trans %}Are you sure you want to remove this user from the group?{% endtrans %}');"><i class="fa fa-times"></i></a>
+                                        <form action="{{ path('remove_user_group', {'groupid': group.id, 'userid': user.user.id}) }}" method="post" onsubmit="return confirm('{% trans %}Are you sure you want to remove this user from the group?{% endtrans %}');">
+
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token('delete_user_from_group') }}"/>
+                                        <a class="btn btn-box-tool" title="{% trans %}Remove user from group{% endtrans %}" data-toggle="tooltip" href="#" onclick="$(this).closest('form').submit()"><i class="fa fa-times"></i></a>
+                                        </form>
                                     </div><!-- /.box-tools -->
                                 {% endif %}
                             </li>
@@ -91,38 +95,14 @@ Groups
                 context: this,
                 type: "POST",
                 url: "{{ path('usersNotInGroupSearch') }}",
-                dataType: "json",
+                dataType: "html",
                 data: {
                     groupId: $(this).data('groupid'),
                     searchText : searchText},
                 success : function(response)
                 {
-                    var add_user_group_url = '{{ path("add_user_group", {'groupid': 'GROUP_ID', 'userid': 'USER_ID'}) }}';
-                    add_user_group_url =  add_user_group_url.replace('GROUP_ID', $(this).data('groupid'));
-                    var cList = $('<ul class=""  />');
-
-                    $.each(response, function(i) {
-                        var li = $('<li/>')
-                                .addClass('ui-menu-item')
-                                .attr('role', 'menuitem')
-                                .appendTo(cList);
-                        var aaa = $('<a/>')
-                                .addClass('ui-all')
-                                .text(this.name)
-                                .attr('href', add_user_group_url.replace('USER_ID', this.id))
-                                .appendTo(li);
-                    });
-                    if(response.length == 0)
-                    {
-                        var li = $('<li>No results found</li>')
-                                .addClass('ui-menu-item')
-                                .attr('role', 'menuitem')
-                                .appendTo(cList);
-                    }
-
-                    $(this).next('.adduser_search_results').html(cList).show();
-
-
+                    $(this).next('.adduser_search_results').html(response).show();
+                    return true;
                 }
             });
         });

@@ -16,6 +16,10 @@
             "Tests\\": "tests/"
         }
     },
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/timwhite/EntityHiddenTypeBundle.git"
+    }],
     "require": {
         "php": ">=5.5.9",
         "symfony/symfony": "3.0.*",
@@ -33,7 +37,8 @@
         "defuse/php-encryption": "2.0.x-dev",
         "jms/translation-bundle": "dev-master",
         "egeloen/ordered-form-bundle": "^2.0",
-        "willdurand/hateoas-bundle": "^1.1"
+        "willdurand/hateoas-bundle": "^1.1",
+        "glifery/entity-hidden-type-bundle": "dev-dev-symfony3"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

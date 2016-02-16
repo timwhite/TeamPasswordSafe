@@ -8,7 +8,9 @@ use AppBundle\Entity\User;
 use AppBundle\Entity\UserGroup;
 use AppBundle\Form\GroupsType;
 use AppBundle\Form\LoginType;
+use AppBundle\Form\UserGroupType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use \Defuse\Crypto\Crypto;
@@ -308,81 +310,43 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/group/{groupid}/adduser/{userid}", name="add_user_group")
+     * @Route("/groupadduser", name="add_user_group")
      */
-    public function addUserGroup(Request $request, $groupid, $userid)
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $groupRepo = $em->getRepository('AppBundle:Groups');
-        /** @var Groups $login */
-        $group = $groupRepo->findOneById($groupid);
-
-        $this->denyAccessUnlessGranted('admin', $group);
-
-        $userRepo = $em->getRepository('AppBundle:User');
-        /** @var User $user */
-        $user = $userRepo->findOneById($userid);
-
-        if (!$user) {
-            $this->addFlash(
-                'error',
-                $this->get('translator')->trans(
-                    'Unable to find user'
-                )
-            );
-
-            return $this->redirectToRoute('groups');
-        }
-
-        $userGroupRepo = $em->getRepository('AppBundle:UserGroup');
-        $userGroup = $userGroupRepo->findOneBy(['user' => $user, 'group' => $group]);
-
-        if ($userGroup) {
-            $this->addFlash(
-                'error',
-                $this->get('translator')->trans(
-                    'User is already a member of that group'
-                )
-            );
-
-            return $this->redirectToRoute('groups');
-        }
-
+    public function addUserGroup(Request $request) {
 
         $usergroup = new UserGroup();
-        $usergroup->setGroup($group);
-        $usergroup->setUser($user);
+        $form = $this->createForm(UserGroupType::class, $usergroup);
 
-        // Get current group key using existing user
-        $groupKey = $this->getGroupKey(
-            $request,
-            $usergroup->getGroup(),
-            $this->get('security.token_storage')->getToken()->getUser()
-        );
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
 
-        // Encrypt key using the user we are adding
-        $usergroup->setGroupKey($this->encryptGroupKeyForUser($user, $groupKey));
-        unset($groupKey);
+            // If we have a public key available for the user we are adding, then we need to get the group password and encrypt it for that user
+            if($usergroup->getUser()->getPubKey())
+            {
+                // Get current group key using existing user
+                $groupKey = $this->getGroupKey($request, $usergroup->getGroup(), $this->get('security.token_storage')->getToken()->getUser());
 
-        $em->persist($usergroup);
+                // Encrypt key using the user we are adding
+                $usergroup->setGroupKey($this->encryptGroupKeyForUser($usergroup->getUser(), $groupKey));
+                unset($groupKey);
+            }
 
-        $em->flush();
+            $em->persist($usergroup);
 
-        $this->addFlash(
-            'success',
-            $this->get('translator')->trans(
-                'User added to group'
-            )
-        );
+            $em->flush();
+            return $this->redirectToRoute('groups');
+        }
 
         return $this->redirectToRoute('groups');
     }
 
     /**
      * @Route("/group/{groupid}/removeuser/{userid}", name="remove_user_group")
+     * @Method({"POST"})
      */
-    public function removeUserGroup($groupid, $userid)
+    public function removeUserGroup(Request $request, $groupid, $userid)
     {
         $em = $this->getDoctrine()->getManager();
         $groupRepo = $em->getRepository('AppBundle:Groups');
@@ -390,6 +354,11 @@ class DefaultController extends Controller
         $group = $groupRepo->findOneById($groupid);
 
         $this->denyAccessUnlessGranted('admin', $group);
+
+        if (!$this->isCsrfTokenValid('delete_user_from_group', $request->get('csrf_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token');
+        }
+
 
         $userRepo = $em->getRepository('AppBundle:User');
         /** @var User $user */
