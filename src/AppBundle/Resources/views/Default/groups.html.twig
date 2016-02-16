@@ -99,32 +99,6 @@ Groups
                 {
                     $(this).next('.adduser_search_results').html(response).show();
                     return true;
-                    var add_user_group_url = '{{ path("add_user_group", {'groupid': 'GROUP_ID', 'userid': 'USER_ID'}) }}';
-                    add_user_group_url =  add_user_group_url.replace('GROUP_ID', $(this).data('groupid'));
-                    var cList = $('<ul class=""  />');
-
-                    $.each(response, function(i) {
-                        var li = $('<li/>')
-                                .addClass('ui-menu-item')
-                                .attr('role', 'menuitem')
-                                .appendTo(cList);
-                        var aaa = $('<a/>')
-                                .addClass('ui-all')
-                                .text(this.name)
-                                .attr('href', add_user_group_url.replace('USER_ID', this.id))
-                                .appendTo(li);
-                    });
-                    if(response.length == 0)
-                    {
-                        var li = $('<li>No results found</li>')
-                                .addClass('ui-menu-item')
-                                .attr('role', 'menuitem')
-                                .appendTo(cList);
-                    }
-
-                    $(this).next('.adduser_search_results').html(cList).show();
-
-
                 }
             });
         });

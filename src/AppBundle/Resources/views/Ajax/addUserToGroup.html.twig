@@ -1,6 +1,6 @@
 {% for form in forms %}
 <div class="box-body">
-    {{ form_start(form, {'action': path('add_user_group2'), 'method': 'POST'})  }}
+    {{ form_start(form, {'action': path('add_user_group'), 'method': 'POST'})  }}
     <a href="#" onclick="$(this).closest('form').submit()">
         <img src="{{ form.vars.value.user.avatar }}&s=30" class="img-rounded "/>
         Add {{ form.vars.value.user.name }} to  group</a>
