@@ -36,9 +36,9 @@ class SearchController extends Controller
      */
     public function usersNotInGroup(Request $request)
     {
-        /*if (! $request->isXmlHttpRequest()) {
+        if (! $request->isXmlHttpRequest()) {
             return new Response('This is not an Ajax request', 400);
-        }*/
+        }
         $groupid = $request->get('groupId');
         $search = $request->get('searchText');
         $users = $this->getDoctrine()

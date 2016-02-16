@@ -24,8 +24,6 @@ class UserGroupType extends AbstractType
         $builder->add('user', EntityHiddenType::class, [
             'class' => 'AppBundle:User'
         ]);
-        $builder
-            ->add('save', SubmitType::class, array('label' => 'Add User'));
 
     }
 
