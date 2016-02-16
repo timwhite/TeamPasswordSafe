@@ -91,12 +91,14 @@ Groups
                 context: this,
                 type: "POST",
                 url: "{{ path('usersNotInGroupSearch') }}",
-                dataType: "json",
+                dataType: "html",
                 data: {
                     groupId: $(this).data('groupid'),
                     searchText : searchText},
                 success : function(response)
                 {
+                    $(this).next('.adduser_search_results').html(response).show();
+                    return true;
                     var add_user_group_url = '{{ path("add_user_group", {'groupid': 'GROUP_ID', 'userid': 'USER_ID'}) }}';
                     add_user_group_url =  add_user_group_url.replace('GROUP_ID', $(this).data('groupid'));
                     var cList = $('<ul class=""  />');

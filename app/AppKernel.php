@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new JMS\TranslationBundle\JMSTranslationBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
+            new Glifery\EntityHiddenTypeBundle\GliferyEntityHiddenTypeBundle(),
             new Ivory\OrderedFormBundle\IvoryOrderedFormBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),

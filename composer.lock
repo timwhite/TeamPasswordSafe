@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "aabe033a020928c8c8b22c76695e2790",
-    "content-hash": "509210683db926388325d98e64889b92",
+    "hash": "7826f684fd387fa5a5791097845a531b",
+    "content-hash": "a8285db97219eeb742fb2b900cfc4524",
     "packages": [
         {
             "name": "avanzu/admin-theme-bundle",
@@ -62,7 +62,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/afda73a6b20d09ab5ec73830e2fd8b21b581fac8",
+                "url": "https://api.github.com/repos/defuse/php-encryption/zipball/2620332d3a753188e3b87d12ccd83ebe76d9c9e7",
                 "reference": "afda73a6b20d09ab5ec73830e2fd8b21b581fac8",
                 "shasum": ""
             },
@@ -979,7 +979,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/5832c554763c7e87ab1299168e054c10e73a8323",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/e770bfa2fd0fc665f55cd7cfeb34bddeffb892f4",
                 "reference": "6ccff96434c0ac7fee077d1dce90966341dfd278",
                 "shasum": ""
             },
@@ -1037,6 +1037,47 @@
                 "User management"
             ],
             "time": "2016-01-08 10:46:39"
+        },
+        {
+            "name": "glifery/entity-hidden-type-bundle",
+            "version": "1.2.1",
+            "target-dir": "Glifery/EntityHiddenTypeBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Glifery/EntityHiddenTypeBundle.git",
+                "reference": "656dfe4d1da32a62756333eda4c22bf29b78959e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Glifery/EntityHiddenTypeBundle/zipball/656dfe4d1da32a62756333eda4c22bf29b78959e",
+                "reference": "656dfe4d1da32a62756333eda4c22bf29b78959e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/framework-bundle": ">=2.3"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Glifery\\EntityHiddenTypeBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Glifery",
+                    "email": "glifery@gmail.com"
+                }
+            ],
+            "description": "Hidden field for Symfony2 entities",
+            "keywords": [
+                "entity hidden form type symfony"
+            ],
+            "time": "2016-02-11 08:22:35"
         },
         {
             "name": "incenteev/composer-parameter-handler",

@@ -1,0 +1,7 @@
+{% for form in forms %}
+<div class="box-body">
+    {{ form_start(form, {'action': path('add_user_group2'), 'method': 'POST'})  }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+{% endfor %}
