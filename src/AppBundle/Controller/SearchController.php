@@ -55,10 +55,6 @@ class SearchController extends Controller
         return $this->render('AppBundle:Ajax:addUserToGroup.html.twig',
             ['forms' => $forms]
         );
-
-        $json = $this->container->get('jms_serializer')->serialize($forms, 'json');
-        return new Response($json);
-
     }
 
     private function getAddUserGroupForm($groupid, User $user)
