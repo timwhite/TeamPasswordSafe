@@ -23,8 +23,6 @@ class GroupsRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('user', $user)
             ->getQuery();
 
-        dump($query->getSQL());
-
         return $query->getResult();
     }
 }
