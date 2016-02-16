@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7826f684fd387fa5a5791097845a531b",
-    "content-hash": "a8285db97219eeb742fb2b900cfc4524",
+    "hash": "d94d978dd5fc86f0826e9b4313cac91e",
+    "content-hash": "c8640ff2b55508e963dd8d73ecbf4664",
     "packages": [
         {
             "name": "avanzu/admin-theme-bundle",
@@ -1040,17 +1040,17 @@
         },
         {
             "name": "glifery/entity-hidden-type-bundle",
-            "version": "1.2.1",
+            "version": "dev-dev-symfony3",
             "target-dir": "Glifery/EntityHiddenTypeBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Glifery/EntityHiddenTypeBundle.git",
-                "reference": "656dfe4d1da32a62756333eda4c22bf29b78959e"
+                "url": "https://github.com/timwhite/EntityHiddenTypeBundle.git",
+                "reference": "13b05686eb0583af3e0f523a28f93e6e4430844a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Glifery/EntityHiddenTypeBundle/zipball/656dfe4d1da32a62756333eda4c22bf29b78959e",
-                "reference": "656dfe4d1da32a62756333eda4c22bf29b78959e",
+                "url": "https://api.github.com/repos/timwhite/EntityHiddenTypeBundle/zipball/13b05686eb0583af3e0f523a28f93e6e4430844a",
+                "reference": "13b05686eb0583af3e0f523a28f93e6e4430844a",
                 "shasum": ""
             },
             "require": {
@@ -1063,7 +1063,6 @@
                     "Glifery\\EntityHiddenTypeBundle": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1077,7 +1076,10 @@
             "keywords": [
                 "entity hidden form type symfony"
             ],
-            "time": "2016-02-11 08:22:35"
+            "support": {
+                "source": "https://github.com/timwhite/EntityHiddenTypeBundle/tree/dev-symfony3"
+            },
+            "time": "2016-02-16 11:18:16"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2961,7 +2963,8 @@
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
         "defuse/php-encryption": 20,
-        "jms/translation-bundle": 20
+        "jms/translation-bundle": 20,
+        "glifery/entity-hidden-type-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
