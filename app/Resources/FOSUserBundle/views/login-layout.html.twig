@@ -1,7 +1,7 @@
 {% extends 'AvanzuAdminThemeBundle:layout:login-layout.html.twig' %}
 
 {% block page_content %}
-    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    {% if is_granted("IS_AUTHENTICATED_FULLY") %}
         <a href="{{ path('fos_user_profile_show') }}">
         {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</a> |
         <a href="{{ path('fos_user_security_logout') }}">

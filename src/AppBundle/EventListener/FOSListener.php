@@ -29,9 +29,17 @@ class FOSListener implements EventSubscriberInterface
             //FOSUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
             SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
             FOSUserEvents::CHANGE_PASSWORD_SUCCESS => 'onPasswordChange',
+            FOSUserEvents::REGISTRATION_SUCCESS => 'onRegistration',
         );
     }
 
+
+    public function onRegistration(FormEvent $event)
+    {
+        /** @var User $user */
+        $user = $event->getForm()->getData();
+        $this->generateKeyPair($user, $user->getPlainPassword());
+    }
     /*public function onImplicitLogin(UserEvent $event)
     {
         //$user = $event->getUser();
