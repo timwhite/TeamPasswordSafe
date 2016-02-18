@@ -61,9 +61,9 @@ class User extends BaseUser implements ThemeUser
     protected $groups;
 
     /**
-     * @ORM\Column(name="pubKey", type="string", length=500, nullable=true)
+     * @ORM\Column(name="pubKey", type="string", length=500)
      */
-    protected $pubKey;
+    protected $pubKey = null;
 
     /**
      * @ORM\Column(name="privateKey", type="string", length=2000, nullable=true)
