@@ -15,8 +15,10 @@ It needed to be:
 
 ## Requirements
 
-Currently needs a patch to the JMSTranslationBundle
-[https://github.com/schmittjoh/JMSTranslationBundle/pull/285/files]
+ * Currently needs a patch to the JMSTranslationBundle <https://github.com/schmittjoh/JMSTranslationBundle/pull/285/files>
+ * Recommended that you serve it over SSL ([Lets Encrypt provides free
+   certificates](https://letsencrypt.org/))
+
 
 ## Installation
 
@@ -50,17 +52,17 @@ long and difficult to guess, your password is more secure than a private key.
 
 ### Why not ______ ?
 
- * Valutier [https://www.vaultier.org/]
+ * Valutier <https://www.vaultier.org/>
 
    Vaultier uses Private keys (see FAQ) instead of passwords. Vaultier appears
    to have limitations past 5 users
 
- * RatticDB [http://rattic.org/]
+ * RatticDB <http://rattic.org/>
 
    RatticDB doesn't encrypt your passwords in the Database, instead recommending
    you encrypt your filesystem. This is very risky as most database leaks occur
    from running machines, which an encypted filesystem doesn't protect you from.
- * TeamPass [https://github.com/nilsteampassnet/TeamPass]
+ * TeamPass <https://github.com/nilsteampassnet/TeamPass>
 
    TeamPass uses Private keys (see FAQ) instead of passwords. The interface
    also felt cluttered and not mobile friendly.
@@ -68,7 +70,7 @@ long and difficult to guess, your password is more secure than a private key.
 ## Architecture
 
 TeamPasswordSafe uses the Symfony framework, AdminLTE (Avanzu Admin Theme
-Bundle), Defuse PHP Encryption [https://github.com/defuse/php-encryption], to
+Bundle), [Defuse PHP Encryption](https://github.com/defuse/php-encryption), to
 enable rapid development, and ensure that I do what I'm good at, writing
 coding. I'm not great at encryption, so lets use a library that is. I'm not
 great at interfaces, so lets use existing interfaces.
@@ -94,7 +96,7 @@ their private key.
  * Allow private keys as login (optional) for those that do know how to
    securely store a private key
  * Work out secure storage of sessions as we store the unlocked private key in
-   the session. [https://github.com/timwhite/TeamPasswordSafe/issues/1]
+   the session. <https://github.com/timwhite/TeamPasswordSafe/issues/1>
  * Allow admin's to export a backup of all passwords they have access to
  * Write the user management interface for managing all users
 (avanzu/admin-theme-bundle
