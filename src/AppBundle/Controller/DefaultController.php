@@ -60,8 +60,9 @@ class DefaultController extends Controller
             $usergroup->setUser($currentuser);
             $usergroup->setAdminAccess(true);
 
+            $keyProtect = $this->get('appbundle.key_protect');
             // Generate a key for this group
-            $usergroup->setGroupKey($this->encryptGroupKeyForUser($currentuser));
+            $usergroup->setGroupKey($keyProtect->encryptGroupKeyForCurrentUser());
 
             $em->persist($usergroup);
 
@@ -73,42 +74,6 @@ class DefaultController extends Controller
         ]);
     }
 
-    private function encryptGroupKeyForUser(User $user, $groupKey = null)
-    {
-        if($groupKey == null)
-        {
-            $groupKey = $this->generateNewGroupKey();
-        }
-
-        // Encrypt key with users public key
-        $pubKey = $user->getPubKey();
-
-        // TODO check return
-        openssl_public_encrypt($groupKey->saveToAsciiSafeString(), $encryptedKey, $pubKey);
-
-        return $encryptedKey;
-
-
-    }
-
-    private function generateNewGroupKey()
-    {
-        /**
-         * @var $key Key
-         */
-        try {
-            $key = Crypto::createNewRandomKey();
-            // WARNING: Do NOT encode $key with bin2hex() or base64_encode(),
-            // they may leak the key to the attacker through side channels.
-        } catch (Ex\CryptoTestFailedException $ex) {
-            die('Cannot safely create a key');
-        } catch (Ex\CannotPerformOperationException $ex) {
-            die('Cannot safely create a key');
-        }
-
-        return $key;
-
-    }
 
     /**
      * @Route("/group/{groupid}", name="logins")
@@ -332,8 +297,9 @@ class DefaultController extends Controller
                 // Get current group key using existing user
                 $groupKey = $this->getGroupKey($request, $usergroup->getGroup(), $this->get('security.token_storage')->getToken()->getUser());
 
+                $keyProtect = $this->get('appbundle.key_protect');
                 // Encrypt key using the user we are adding
-                $usergroup->setGroupKey($this->encryptGroupKeyForUser($usergroup->getUser(), $groupKey));
+                $usergroup->setGroupKey($keyProtect->encryptGroupKeyForCurrentUser($groupKey));
                 unset($groupKey);
             }
 

@@ -34,3 +34,12 @@ services:
         tags:
             - { name: security.voter }
         public: false
+
+
+    appbundle.field_protect:
+        class: AppBundle\Util\FieldProtect
+        arguments: ['@request_stack', '@security.token_storage']
+
+    appbundle.key_protect:
+        class: AppBundle\Util\KeyProtect
+        arguments: ['@request_stack', '@security.token_storage']
