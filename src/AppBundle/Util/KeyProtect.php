@@ -2,6 +2,7 @@
 
 namespace AppBundle\Util;
 
+use AppBundle\Entity\User;
 use AppBundle\Entity\Groups;
 use AppBundle\Entity\UserGroup;
 use AppBundle\Repository\UserGroupRepository;
@@ -62,15 +63,25 @@ class KeyProtect
 
     }
 
-    public function encryptGroupKeyForCurrentUser($groupKey = null)
+    public function newEncryptedGroupKeyForCurrentUser()
     {
-        if($groupKey == null)
-        {
-            $groupKey = $this->generateNewGroupKey();
-        }
+        $groupKey = $this->generateNewGroupKey();
+        return $this->encryptGroupKeyForUser($this->getUser(), $groupKey);
+    }
+
+    /**
+     * Use existing user to retrieve groupKey, we can then encrypt
+     * group key for new user
+     *
+     * @param User   $user
+     * @param Groups $group
+     */
+    public function encryptGroupKeyForUser(User $user, Groups $group)
+    {
+        $groupKey = $this->getGroupKey($group);
 
         // Encrypt key with users public key
-        $pubKey = $this->getUser()->getPubKey();
+        $pubKey = $user->getPubKey();
 
         // TODO check return
         openssl_public_encrypt($groupKey->saveToAsciiSafeString(), $encryptedKey, $pubKey);
@@ -80,7 +91,7 @@ class KeyProtect
 
     }
 
-    private function generateNewGroupKey()
+     private function generateNewGroupKey()
     {
         /**
          * @var $key Key

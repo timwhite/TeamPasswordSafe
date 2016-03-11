@@ -62,7 +62,7 @@ class DefaultController extends Controller
 
             $keyProtect = $this->get('appbundle.key_protect');
             // Generate a key for this group
-            $usergroup->setGroupKey($keyProtect->encryptGroupKeyForCurrentUser());
+            $usergroup->setGroupKey($keyProtect->newEncryptedGroupKeyForCurrentUser());
 
             $em->persist($usergroup);
 
@@ -256,12 +256,9 @@ class DefaultController extends Controller
             // If we have a public key available for the user we are adding, then we need to get the group password and encrypt it for that user
             if($usergroup->getUser()->getPubKey())
             {
-                // Get current group key using existing user
-                $groupKey = $this->getGroupKey($request, $usergroup->getGroup(), $this->get('security.token_storage')->getToken()->getUser());
-
                 $keyProtect = $this->get('appbundle.key_protect');
                 // Encrypt key using the user we are adding
-                $usergroup->setGroupKey($keyProtect->encryptGroupKeyForCurrentUser($groupKey));
+                $usergroup->setGroupKey($keyProtect->encryptGroupKeyForUser($usergroup->getUser(), $usergroup->getGroup()));
                 unset($groupKey);
             }
 
