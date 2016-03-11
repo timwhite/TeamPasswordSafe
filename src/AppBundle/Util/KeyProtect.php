@@ -66,7 +66,7 @@ class KeyProtect
     public function newEncryptedGroupKeyForCurrentUser()
     {
         $groupKey = $this->generateNewGroupKey();
-        return $this->encryptGroupKeyForUser($this->getUser(), $groupKey);
+        return $this->encryptGroupKey($this->getUser(), $groupKey);
     }
 
     /**
@@ -80,6 +80,13 @@ class KeyProtect
     {
         $groupKey = $this->getGroupKey($group);
 
+        return $this->encryptGroupKey($user, $groupKey);
+
+
+    }
+
+    private function encryptGroupKey(User $user, Key $groupKey)
+    {
         // Encrypt key with users public key
         $pubKey = $user->getPubKey();
 
@@ -87,8 +94,6 @@ class KeyProtect
         openssl_public_encrypt($groupKey->saveToAsciiSafeString(), $encryptedKey, $pubKey);
 
         return $encryptedKey;
-
-
     }
 
      private function generateNewGroupKey()
