@@ -19,6 +19,14 @@ It needed to be:
  * Recommended that you serve it over SSL ([Lets Encrypt provides free
    certificates](https://letsencrypt.org/))
 
+## Demo
+
+A live demo is currently available at <http://teampasswordsafe.org>
+
+Register an account, then create a group. Lastly, add passwords to your group.
+You can add any registered user to your group, and they'll also be able to view
+and edit the group passwords.
+
 
 ## Installation
 
