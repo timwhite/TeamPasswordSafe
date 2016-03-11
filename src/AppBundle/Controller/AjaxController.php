@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Form\UserGroupType;
 
-class SearchController extends Controller
+class AjaxController extends Controller
 {
     /**
      * @Route("/search", name="liveSearch")
