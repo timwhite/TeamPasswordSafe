@@ -22,7 +22,8 @@ It needed to be:
 
 ## Installation
 
-Installation instructions coming soon.
+See
+[INSTALL.md](https://github.com/timwhite/TeamPasswordSafe/blob/master/INSTALL.md) for basic install instructions
 
 ## FAQ
 
