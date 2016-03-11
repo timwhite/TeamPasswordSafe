@@ -38,8 +38,13 @@ services:
 
     appbundle.field_protect:
         class: AppBundle\Util\FieldProtect
-        arguments: ['@request_stack', '@security.token_storage']
+        arguments: ['@request_stack', '@security.token_storage', '@appbundle.key_protect']
 
     appbundle.key_protect:
         class: AppBundle\Util\KeyProtect
-        arguments: ['@request_stack', '@security.token_storage']
+        arguments: ['@request_stack', '@security.token_storage', '@appbundle.user_group_repository']
+
+    appbundle.user_group_repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments: [AppBundle\Entity\UserGroup]

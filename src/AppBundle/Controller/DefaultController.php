@@ -134,11 +134,9 @@ class DefaultController extends Controller
         {
             $group = $login->getGroup();
             // With login, we need to encrypt the password to save it
-            $encryptedPassword = $this->encryptLoginWithGroupKey(
-                $request,
+            $encryptedPassword = $this->get('appbundle.field_protect')->encryptLoginWithGroupKey(
                 $group,
-                $form->get('plainPassword')->getData(),
-                $this->get('security.token_storage')->getToken()->getUser()
+                $form->get('plainPassword')->getData()
             );
             $login->setPassword($encryptedPassword);
             $em = $this->getDoctrine()->getManager();
@@ -150,49 +148,6 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:login.html.twig', [
             'form' => $form->createView()
         ]);
-    }
-
-    private function encryptLoginWithGroupKey(Request $request, Groups $group, $loginpass, User $user)
-    {
-        $groupKey = $this->getGroupKey($request, $group, $user);
-        // Encrypt login with group key
-        $encryptedPass = Crypto::encrypt($loginpass, $groupKey);
-        return $encryptedPass;
-    }
-
-    private function decryptLoginWithGroupKey(Request $request, Groups $group, $encryptedLogin, User $user)
-    {
-        $groupKey = $this->getGroupKey($request, $group, $user);
-        // Decrypt login with group key
-        $plainPass = "";
-        try {
-            $plainPass = Crypto::decrypt($encryptedLogin, $groupKey);
-        } catch (\Defuse\Crypto\Exception\InvalidCiphertextException $ex) { // VERY IMPORTANT
-            // Either:
-            //   1. The ciphertext was modified by the attacker,
-            //   2. The key is wrong, or
-            //   3. $ciphertext is not a valid ciphertext or was corrupted.
-            // Assume the worst.
-            $this->addFlash(
-                'error',
-                $this->get('translator')->trans('Unable to decode encrypted password - Editing now will overwrite current encrypted value')
-            );
-        } catch (\Defuse\Crypto\Exception\CryptoTestFailedException $ex) {
-            $this->addFlash(
-                'error',
-                $this->get('translator')->trans(
-                    'Cannot safely perform decryption - Editing now will overwrite current encrypted value'
-                )
-            );
-        } catch (\Defuse\Crypto\Exception\CannotPerformOperationException $ex) {
-            $this->addFlash(
-                'error',
-                $this->get('translator')->trans(
-                    'Cannot safely perform decryption - Editing now will overwrite current encrypted value'
-                )
-            );
-        }
-        return $plainPass;
     }
 
     private function getGroupKey(Request $request, Groups $group, User $user)
@@ -241,22 +196,29 @@ class DefaultController extends Controller
         ]);
 
         // Current password is encrypted, lets get the plain text version
-        $plainPassword = $this->decryptLoginWithGroupKey(
-            $request,
-            $login->getGroup(),
-            $login->getPassword(),
-            $this->get('security.token_storage')->getToken()->getUser());
+        try {
+            $plainPassword = $this->get('appbundle.field_protect')->decryptLoginWithGroupKey(
+                $login->getGroup(),
+                $login->getPassword()
+            );
+        } catch (Ex\CryptoException $ex) {
+            $this->addFlash(
+                'error',
+                $this->get('translator')->trans(
+                    'There was a problem decoding the encrypted password - Editing now will overwrite current encrypted value'
+                )
+            );
+            $plainPassword = "";
+        }
         $form->get('plainPassword')->setData($plainPassword);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
             // With login, we need to encrypt the password to save it
-            $encryptedPassword = $this->encryptLoginWithGroupKey(
-                $request,
+            $encryptedPassword = $this->get('appbundle.field_protect')->encryptLoginWithGroupKey(
                 $login->getGroup(),
-                $form->get('plainPassword')->getData(),
-                $this->get('security.token_storage')->getToken()->getUser()
+                $form->get('plainPassword')->getData()
             );
 
             $login->setPassword($encryptedPassword);

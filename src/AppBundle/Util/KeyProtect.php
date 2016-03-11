@@ -4,6 +4,7 @@ namespace AppBundle\Util;
 
 use AppBundle\Entity\Groups;
 use AppBundle\Entity\UserGroup;
+use AppBundle\Repository\UserGroupRepository;
 use Defuse\Crypto\Key;
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Exception as Ex;
@@ -18,10 +19,14 @@ class KeyProtect
     /** @var TokenStorage  */
     protected $token_storage;
 
-    public function __construct(RequestStack $requestStack, TokenStorage $token_storage)
+    /** @var  UserGroupRepository */
+    protected $userGroupRepository;
+
+    public function __construct(RequestStack $requestStack, TokenStorage $token_storage, UserGroupRepository $userGroupRepository)
     {
         $this->request = $requestStack->getCurrentRequest();
         $this->token_storage = $token_storage;
+        $this->userGroupRepository = $userGroupRepository;
 
     }
 
@@ -30,15 +35,14 @@ class KeyProtect
         return $this->token_storage->getToken()->getUser();
     }
 
-    private function getGroupKey(Groups $group)
+    public function getGroupKey(Groups $group)
     {
         // Get private key of current user
         $privKey = $this->request->getSession()->get('pkey');
 
         // Get encrypted group key
-        $usergrouprepo = $this->getDoctrine()->getManager()->getRepository(UserGroup::class);
         /** @var UserGroup $usergroup */
-        $usergroup = $usergrouprepo->findOneBy(
+        $usergroup = $this->userGroupRepository->findOneBy(
             [
                 'user' => $this->getUser()->getId(),
                 'group' => $group->getId()
