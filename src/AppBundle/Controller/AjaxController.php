@@ -2,9 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Login;
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserGroup;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use \Defuse\Crypto\Exception as Ex;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +31,16 @@ class AjaxController extends Controller
         $json = $this->container->get('serializer')->serialize($logins, 'json');
         return new Response($json);
 
+    }
+
+    /**
+     *
+     * @Route("/login/{id}/password", name="ajaxPassword", condition="request.isXmlHttpRequest()")
+     */
+    public function loginRetrievePassword(Login $login)
+    {
+        $fieldProtect = $this->get('appbundle.field_protect');
+        return new JsonResponse($fieldProtect->decryptLoginPassword($login));
     }
 
     /**
@@ -75,5 +87,7 @@ class AjaxController extends Controller
 
         return $form;
     }
+
+
 
 }
