@@ -3,25 +3,18 @@
 namespace AppBundle\Util;
 
 use AppBundle\Entity\Groups;
-use AppBundle\Entity\UserGroup;
 use AppBundle\Util\KeyProtect;
 use Defuse\Crypto\Key;
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Exception as Ex;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class FieldProtect
 {
-    /** @var Request  */
-    protected $request;
     /** @var  KeyProtect */
     protected $keyProtect;
 
-    public function __construct(RequestStack $requestStack, KeyProtect $keyProtect)
+    public function __construct(KeyProtect $keyProtect)
     {
-        $this->request = $requestStack->getCurrentRequest();
         $this->keyProtect = $keyProtect;
 
     }

@@ -38,7 +38,7 @@ services:
 
     appbundle.field_protect:
         class: AppBundle\Util\FieldProtect
-        arguments: ['@request_stack', '@appbundle.key_protect']
+        arguments: ['@appbundle.key_protect']
 
     appbundle.key_protect:
         class: AppBundle\Util\KeyProtect
