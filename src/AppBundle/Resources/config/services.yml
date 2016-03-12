@@ -56,6 +56,7 @@ services:
 
     appbundle.normalizer.login:
         class: AppBundle\Serializer\Normalizer\LoginNormalizer
+        arguments: ['@appbundle.field_protect']
 
     appbundle.serializer.default:
         class: Symfony\Component\Serializer\Serializer

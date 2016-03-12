@@ -3,10 +3,18 @@
 namespace AppBundle\Serializer\Normalizer;
 
 use AppBundle\Entity\Login;
+use AppBundle\Util\FieldProtect;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class LoginNormalizer implements NormalizerInterface
 {
+    private $fieldProtect;
+
+    public function __construct(FieldProtect $fieldProtect)
+    {
+        $this->fieldProtect = $fieldProtect;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -17,9 +25,9 @@ class LoginNormalizer implements NormalizerInterface
             'name'   => $object->getName(),
             'url' => $object->getUrl(),
             'username' => $object->getUsername(),
-            'password' => $object->getPassword(),
+            'password' => $this->fieldProtect->decryptLoginPassword($object),
             'notes' => $object->getNotes(),
-            'groups' => $object->getGroup()->getName()
+            'group' => $object->getGroup()->getName()
         ];
     }
 

@@ -300,7 +300,7 @@ class DefaultController extends Controller
         $logins = $loginRepo->findAllByUser($user);
 
         $serializer = $this->get('appbundle.serializer.default');
-        
+
         return new Response($serializer->serialize($logins, 'json'));
 
     }
