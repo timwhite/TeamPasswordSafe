@@ -301,7 +301,13 @@ class DefaultController extends Controller
 
         $serializer = $this->get('appbundle.serializer.default');
 
-        return new Response($serializer->serialize($logins, 'json'));
+        $response = new Response($serializer->serialize($logins, 'json'));
+
+        $response->headers->set('Content-Type', 'text/json');
+        $response->headers->set('Content-Disposition', 'attachment; filename="export.json"');
+
+        return $response;
+
 
     }
 

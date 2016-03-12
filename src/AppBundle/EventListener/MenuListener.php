@@ -70,6 +70,8 @@ class MenuListener {
                 )
             );
         }
+
+        $menuItems[] = new MenuItemModel('export_all', $this->translator->trans('Export All Passwords'), 'export_logins');
 /*
  *
         // Add some children
