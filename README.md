@@ -108,4 +108,3 @@ their private key.
    the session. <https://github.com/timwhite/TeamPasswordSafe/issues/1>
  * Allow admin's to export a backup of all passwords they have access to
  * Write the user management interface for managing all users
-(avanzu/admin-theme-bundle
