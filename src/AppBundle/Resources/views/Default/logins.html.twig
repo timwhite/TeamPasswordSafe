@@ -21,7 +21,9 @@ Logins
                                 <span class="info-box-text"><a href="{{ path('edit_login', {'loginid': login.id}) }}">{{ login.name }}</a></span>
                                 <span class="info-box-more">
                                     <strong>Username:</strong> {{ login.username }}<br/>
-                                    <strong>Url:</strong> {{ login.url }}
+                                    <strong>Url:</strong> {{ login.url }}<br/>
+                                    <strong>Password:</strong>
+                                     <span class="password_hidden password" data-passwordreq="{{ path('ajaxPassword', {'id': login.id})}}">&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;</span>
                                 </span>
                                 <span class="info-box-more">
                                     {{ login.notes }}
@@ -33,27 +35,76 @@ Logins
 
                 {% endfor %}
                 <a class="fab bg-green" href="{{ path('new_login', { 'groupid': group.id }) }}"><i style="" class="fa fa-plus"></i></a>
-                <style>
-                    .fab {
-                        display: inline-block;
-                        border:none;
-                        font-size:1.5em;
-                        color:white;
-                        border-radius: 50%;
-                        width: 50px;
-                        height: 50px;
-                        margin: auto;
-                        -webkit-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-                        -moz-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-                        box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-                        line-height: 50px;
-                        text-align: center;
-                        vertical-align: bottom;
-                    }
 
-                </style>
             </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    .password_hidden {
+        -webkit-text-security: disc;
+        -webkit-filter: blur(3px);
+        -moz-filter: blur(3px);
+        filter: blur(3px);
+        max-width: 8em;
+        overflow: hidden;
+        display: inline-block;
+
+    }
+
+    .password {
+        font-family: "Courier New", Courier, monospace;
+        display: inline-block;
+        white-space: nowrap;
+
+    }
+
+    .fab {
+        display: inline-block;
+        border:none;
+        font-size:1.5em;
+        color:white;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        margin: auto;
+        -webkit-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
+        -moz-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
+        box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
+        line-height: 50px;
+        text-align: center;
+        vertical-align: bottom;
+    }
+
+</style>
+{% endblock %}
+
+{% block javascripts_inline %}
+    {{ parent() }}
+    <script>
+        $('.password').click(function() {
+            if($(this).data('passwordreq')) {
+                $.ajax({
+                    context: this,
+                    type: "GET",
+                    url: $(this).data('passwordreq'),
+                    dataType: "json",
+                    success: function (response) {
+                        $(this).html(response);
+                        $(this).removeClass('password_hidden');
+                        return true;
+                    }
+                });
+                $(this).removeData('passwordreq').removeAttr('data-passwordreq');
+
+            } else {
+                $(this).toggleClass('password_hidden');
+            }
+        })
+
+    </script>
 {% endblock %}
