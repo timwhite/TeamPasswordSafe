@@ -132,18 +132,13 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
-            $group = $login->getGroup();
             // With login, we need to encrypt the password to save it
-            $encryptedPassword = $this->get('appbundle.field_protect')->encryptLoginWithGroupKey(
-                $group,
-                $form->get('plainPassword')->getData()
-            );
-            $login->setPassword($encryptedPassword);
+            $this->get('appbundle.field_protect')->encryptLoginPassword($login, $form->get('plainPassword')->getData());
             $em = $this->getDoctrine()->getManager();
             $em->persist($login);
 
             $em->flush();
-            return $this->redirectToRoute('logins', ['groupid' => $group->getId()] );
+            return $this->redirectToRoute('logins', ['groupid' => $login->getGroup()->getId()] );
         }
         return $this->render('AppBundle:Default:login.html.twig', [
             'form' => $form->createView()
@@ -168,10 +163,7 @@ class DefaultController extends Controller
 
         // Current password is encrypted, lets get the plain text version
         try {
-            $plainPassword = $this->get('appbundle.field_protect')->decryptLoginWithGroupKey(
-                $login->getGroup(),
-                $login->getPassword()
-            );
+            $plainPassword = $this->get('appbundle.field_protect')->decryptLoginPassword($login);
         } catch (Ex\CryptoException $ex) {
             $this->addFlash(
                 'error',
@@ -187,12 +179,7 @@ class DefaultController extends Controller
         if ($form->isSubmitted() && $form->isValid())
         {
             // With login, we need to encrypt the password to save it
-            $encryptedPassword = $this->get('appbundle.field_protect')->encryptLoginWithGroupKey(
-                $login->getGroup(),
-                $form->get('plainPassword')->getData()
-            );
-
-            $login->setPassword($encryptedPassword);
+            $this->get('appbundle.field_protect')->encryptLoginPassword($login, $form->get('plainPassword')->getData());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($login);
