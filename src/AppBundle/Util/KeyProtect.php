@@ -9,8 +9,10 @@ use AppBundle\Repository\UserGroupRepository;
 use Defuse\Crypto\Key;
 use Defuse\Crypto\Crypto;
 use Defuse\Crypto\Exception as Ex;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 class KeyProtect
@@ -49,6 +51,13 @@ class KeyProtect
                 'group' => $group->getId()
             ]
         );
+
+        // If $usergroup is null, then current user is not a member of this group
+        if(is_null($usergroup))
+        {
+            throw new AccessDeniedHttpException("Attempt to access password user doesn't have access to");
+        }
+
         $encryptedGroupKey = $usergroup->getGroupKey();
 
         // Decrypt Group key with current users private key

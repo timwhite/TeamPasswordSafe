@@ -19,13 +19,10 @@ use Hackzilla\PasswordGenerator\Generator\HumanPasswordGenerator;
 class AjaxController extends Controller
 {
     /**
-     * @Route("/search", name="liveSearch")
+     * @Route("/search", name="liveSearch", condition="request.isXmlHttpRequest()")
      */
     public function liveSearchAction(Request $request)
     {
-        if (! $request->isXmlHttpRequest()) {
-            return new Response('This is not an Ajax request', 400);
-        }
         $string = $request->get('searchText');
         $logins = $this->getDoctrine()
             ->getRepository('AppBundle:Login')
