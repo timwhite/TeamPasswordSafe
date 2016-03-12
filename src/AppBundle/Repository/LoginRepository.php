@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\User;
+
 /**
  * LoginRepository
  *
@@ -10,6 +12,11 @@ namespace AppBundle\Repository;
  */
 class LoginRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * TODO: Only return logins that the user has permission to
+     * @param $string
+     * @return array
+     */
     public function findByLetters($string)
     {
         return $this->getEntityManager()->createQuery('SELECT l FROM AppBundle:Login l
@@ -18,4 +25,21 @@ class LoginRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('string','%'.$string.'%')
             ->getResult();
     }
+
+    public function findAllByUser(User $user)
+    {
+
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('l')
+            ->from('AppBundle:Login', 'l')
+            ->join('l.group', 'g')
+            ->join('AppBundle:UserGroup', 'j')
+            ->Where('g.id = j.group')
+            ->andWhere('j.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
 }

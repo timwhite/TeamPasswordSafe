@@ -48,3 +48,20 @@ services:
         class: Doctrine\ORM\EntityRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments: [AppBundle\Entity\UserGroup]
+
+
+    # JSON Encoder
+    appbundle.encoder.json:
+        class: Symfony\Component\Serializer\Encoder\JsonEncoder
+
+    appbundle.normalizer.login:
+        class: AppBundle\Serializer\Normalizer\LoginNormalizer
+
+    appbundle.serializer.default:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            0:
+                - '@appbundle.normalizer.login'
+                - '@serializer.normalizer.object'
+            1:
+                - '@appbundle.encoder.json'

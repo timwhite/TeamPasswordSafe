@@ -290,6 +290,23 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/export", name="export_logins")
+     */
+    public function exportLogins()
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $loginRepo = $em->getRepository('AppBundle:Login');
+        $logins = $loginRepo->findAllByUser($user);
+
+        $serializer = $this->get('appbundle.serializer.default');
+        
+        return new Response($serializer->serialize($logins, 'json'));
+
+    }
+
+    /**
+     * TODO: Move to AjaxController?
      * @Route("/generate/humanPassword", name="generateHumanPassword")
      */
     public function liveSearchAction(Request $request)
