@@ -23,6 +23,13 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *       parameters = { "loginid" = "expr(object.getId())" }
  *     )
  * )
+ * @Hateoas\Relation(
+ *     "view",
+ *     href = @Hateoas\Route(
+ *       "logins",
+ *       parameters = { "groupid" = "expr(object.getGroup().getId())" }
+ *     )
+ * )
  */
 class Login
 {

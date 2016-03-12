@@ -186,7 +186,7 @@
                             var aaa = $('<a/>')
                                     .addClass('ui-all')
                                     .text(this.name)
-                                    .attr('href', this._links.edit.href)
+                                    .attr('href', this._links.view.href + '#login_' + this.id)
                                     .appendTo(li);
                         });
                         if(response.length == 0)
