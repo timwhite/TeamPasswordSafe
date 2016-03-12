@@ -16,23 +16,14 @@ class FieldProtect
 {
     /** @var Request  */
     protected $request;
-    /** @var TokenStorage  */
-    protected $token_storage;
-
     /** @var  KeyProtect */
     protected $keyProtect;
 
-    public function __construct(RequestStack $requestStack, TokenStorage $token_storage, KeyProtect $keyProtect)
+    public function __construct(RequestStack $requestStack, KeyProtect $keyProtect)
     {
         $this->request = $requestStack->getCurrentRequest();
-        $this->token_storage = $token_storage;
         $this->keyProtect = $keyProtect;
 
-    }
-
-    private function getUser()
-    {
-        return $this->token_storage->getToken()->getUser();
     }
 
     public function encryptLoginWithGroupKey(Groups $group, $loginPassword)

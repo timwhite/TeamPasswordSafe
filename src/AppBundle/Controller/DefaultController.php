@@ -150,35 +150,6 @@ class DefaultController extends Controller
         ]);
     }
 
-    private function getGroupKey(Request $request, Groups $group, User $user)
-    {
-        // Get private key of current user
-        $privKey = $request->getSession()->get('pkey');
-
-        // Get encrypted group key
-        $usergrouprepo = $this->getDoctrine()->getManager()->getRepository(UserGroup::class);
-        /** @var UserGroup $usergroup */
-        $usergroup = $usergrouprepo->findOneBy(
-            [
-                'user' => $user->getId(),
-                'group' => $group->getId()
-            ]
-        );
-        $encryptedGroupKey = $usergroup->getGroupKey();
-
-        // Decrypt Group key with current users private key
-        // TODO check return
-        if (openssl_private_decrypt($encryptedGroupKey, $groupKey, $privKey)) {
-            $groupKey = Key::LoadFromAsciiSafeString($groupKey);
-            return $groupKey;
-        } else {
-            // TODO catch this upstream?
-            throw new \Exception("Unable to decode group key for current user");
-        }
-
-    }
-
-
     /**
      * @Route("/login/edit/{loginid}", name="edit_login")
      */
