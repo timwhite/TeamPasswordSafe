@@ -13,17 +13,25 @@ use AppBundle\Entity\User;
 class LoginRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
-     * TODO: Only return logins that the user has permission to
      * @param $string
      * @return array
      */
-    public function findByLetters($string)
+    public function findByLetters($string, User $user)
     {
-        return $this->getEntityManager()->createQuery('SELECT l FROM AppBundle:Login l
-                WHERE l.name LIKE :string
-                 OR l.url LIKE :string')
-            ->setParameter('string','%'.$string.'%')
-            ->getResult();
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('l')
+            ->from('AppBundle:Login', 'l')
+            ->join('l.group', 'g')
+            ->join('AppBundle:UserGroup', 'j')
+            ->Where('g.id = j.group')
+            ->andWhere('j.user = :user')
+            ->andWhere('(l.name LIKE :string OR l.url LIKE :string)')
+            ->setParameter('user', $user)
+            ->setParameter('string', '%'.$string.'%')
+            ->getQuery();
+
+        return $query->getResult();
+
     }
 
     public function findAllByUser(User $user)

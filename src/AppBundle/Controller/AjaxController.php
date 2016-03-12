@@ -24,9 +24,10 @@ class AjaxController extends Controller
     public function liveSearchAction(Request $request)
     {
         $string = $request->get('searchText');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $logins = $this->getDoctrine()
             ->getRepository('AppBundle:Login')
-            ->findByLetters($string);
+            ->findByLetters($string, $user);
 
         $json = $this->container->get('serializer')->serialize($logins, 'json');
         return new Response($json);
