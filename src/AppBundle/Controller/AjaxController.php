@@ -12,6 +12,9 @@ use \Defuse\Crypto\Exception as Ex;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Form\UserGroupType;
+use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
+use Hackzilla\PasswordGenerator\Generator\HumanPasswordGenerator;
+
 
 class AjaxController extends Controller
 {
@@ -67,6 +70,39 @@ class AjaxController extends Controller
         return $this->render('AppBundle:Ajax:addUserToGroup.html.twig',
             ['forms' => $forms]
         );
+    }
+
+    /**
+     * @Route("/generate/humanPassword", name="generateHumanPassword", condition="request.isXmlHttpRequest()")
+     */
+    public function generatePasswordAction(Request $request)
+    {
+        $generator = new ComputerPasswordGenerator();
+
+        $generator
+            ->setUppercase()
+            ->setLowercase()
+            ->setNumbers()
+            ->setSymbols(false)
+            ->setAvoidSimilar()
+            ->setLength(12);
+
+        $passwords = $generator->generatePasswords(5);
+
+        $generator = new HumanPasswordGenerator();
+        $generator
+            ->setWordList('/usr/share/dict/words')
+            ->setWordCount(3)
+            ->setWordSeparator('-');
+
+        $passwords = array_merge($passwords, $generator->generatePasswords(5));
+        //return new JsonResponse($passwords);
+
+        return $this->render('AppBundle:Ajax:generatePasswords.html.twig',
+            ['passwords' => $passwords]
+        );
+
+
     }
 
     private function getAddUserGroupForm($groupid, User $user)

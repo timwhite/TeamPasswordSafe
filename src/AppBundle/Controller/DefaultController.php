@@ -9,8 +9,6 @@ use AppBundle\Entity\UserGroup;
 use AppBundle\Form\GroupsType;
 use AppBundle\Form\LoginType;
 use AppBundle\Form\UserGroupType;
-use Hackzilla\PasswordGenerator\Generator\ComputerPasswordGenerator;
-use Hackzilla\PasswordGenerator\Generator\HumanPasswordGenerator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -307,44 +305,6 @@ class DefaultController extends Controller
         $response->headers->set('Content-Disposition', 'attachment; filename="export.json"');
 
         return $response;
-
-
-    }
-
-    /**
-     * TODO: Move to AjaxController?
-     * @Route("/generate/humanPassword", name="generateHumanPassword")
-     */
-    public function liveSearchAction(Request $request)
-    {
-        /*if (! $request->isXmlHttpRequest()) {
-            return new Response('This is not an Ajax request', 400);
-        }*/
-
-        $generator = new ComputerPasswordGenerator();
-
-        $generator
-            ->setUppercase()
-            ->setLowercase()
-            ->setNumbers()
-            ->setSymbols(false)
-            ->setAvoidSimilar()
-            ->setLength(12);
-
-        $passwords = $generator->generatePasswords(5);
-
-        $generator = new HumanPasswordGenerator();
-        $generator
-            ->setWordList('/usr/share/dict/words')
-            ->setWordCount(3)
-            ->setWordSeparator('-');
-
-        $passwords = array_merge($passwords, $generator->generatePasswords(5));
-        //return new JsonResponse($passwords);
-
-        return $this->render('AppBundle:Ajax:generatePasswords.html.twig',
-            ['passwords' => $passwords]
-        );
 
 
     }
