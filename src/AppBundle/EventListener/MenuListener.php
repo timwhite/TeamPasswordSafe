@@ -44,6 +44,9 @@ class MenuListener {
         /** @var Groups $group */
         /** @var UserGroup $usergroup */
         if($this->current_user) {
+            $groups->addChild(
+                new MenuItemModel('allgroups', 'All Groups', 'groups')
+            );
             foreach ($this->current_user->getGroups() as $usergroup) {
                 $group = $usergroup->getGroup();
                 $groups->addChild(

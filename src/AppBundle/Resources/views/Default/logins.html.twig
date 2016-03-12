@@ -14,6 +14,7 @@ Logins
 
             <div class="row">
                 {% for login in group.logins %}
+                    {% if loop.index is odd %}<div class="clearfix"></div>{% endif %}
                     <div class="col-sm-6">
                         <div class="info-box" id="login_{{ login.id }}">
                             <span class="info-box-icon bg-blue"><i class="fa fa-star-o"></i></span>
@@ -27,7 +28,7 @@ Logins
                                      <span class="password_hidden password" data-passwordreq="{{ path('ajaxPassword', {'id': login.id})}}">&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;</span>
                                 </span>
                                 <span class="info-box-more">
-                                    {{ login.notes }}
+                                    {{ login.notes|nl2br }}
                                 </span>
 
                             </div>

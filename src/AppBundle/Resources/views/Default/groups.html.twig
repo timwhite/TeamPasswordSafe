@@ -8,7 +8,8 @@ Groups
 <div class="row">
     {% for usergroup in usergroups %}
         {% set group=usergroup.group %}
-        <div class="col-sm-6">
+        {% if loop.index is odd %}<div class="clearfix"></div>{% endif %}
+        <div class="col-sm-6 ">
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title"><a href="{{ path('logins', {'groupid': group.id}) }}">{{ group.name }}</a></h3>
