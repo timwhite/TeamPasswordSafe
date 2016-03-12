@@ -15,9 +15,10 @@ Logins
             <div class="row">
                 {% for login in group.logins %}
                     <div class="col-sm-6">
-                        <div class="info-box">
+                        <div class="info-box" id="login_{{ login.id }}">
                             <span class="info-box-icon bg-blue"><i class="fa fa-star-o"></i></span>
                             <div class="info-box-content">
+
                                 <span class="info-box-text"><a href="{{ path('edit_login', {'loginid': login.id}) }}">{{ login.name }}</a></span>
                                 <span class="info-box-more">
                                     <strong>Username:</strong> {{ login.username }}<br/>
@@ -45,6 +46,16 @@ Logins
 {% block stylesheets %}
 {{ parent() }}
 <style>
+    :target {
+        background-color: #ffa;
+        animation: highlight 5s ease;
+    }
+
+    @keyframes highlight {
+        0% { background-color: #ffa; }
+        100% { background-color: white; }
+    }
+
     .password_hidden {
         -webkit-text-security: disc;
         -webkit-filter: blur(3px);
