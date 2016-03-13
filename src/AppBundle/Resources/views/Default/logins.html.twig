@@ -112,6 +112,17 @@ Logins
                     success: function (response) {
                         $(this).html(response);
                         $(this).removeClass('password_hidden');
+
+                        var selection = window.getSelection();
+                        var range = document.createRange();
+                        range.selectNodeContents(this);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        //add to clipboard.
+                        document.execCommand('copy');
+
+
+
                         return true;
                     }
                 });
