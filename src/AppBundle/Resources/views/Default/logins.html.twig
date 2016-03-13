@@ -17,7 +17,7 @@ Logins
                     {% if loop.index is odd %}<div class="clearfix"></div>{% endif %}
                     <div class="col-sm-6">
                         <div class="info-box" id="login_{{ login.id }}">
-                            <span class="info-box-icon bg-blue"><i class="fa fa-star-o"></i></span>
+                            <span class="info-box-icon {{ login.url | fabrandcolor }}"><i class="fa {{ login.url | fabrand }}"></i></span>
                             <div class="info-box-content">
 
                                 <span class="info-box-text"><a href="{{ path('edit_login', {'loginid': login.id}) }}">{{ login.name }}</a></span>
@@ -46,6 +46,7 @@ Logins
 
 {% block stylesheets %}
 {{ parent() }}
+    <link type="text/css" rel="stylesheet" href="/fa-colored-icons-v1-1-0/fa-colored-brand-icons.min.css"/>
 <style>
     :target {
         animation: highlight 5s ease;
@@ -72,6 +73,10 @@ Logins
         display: inline-block;
         white-space: nowrap;
 
+    }
+
+    .fa-color-icons {
+        background: white !important;
     }
 
     .fab {

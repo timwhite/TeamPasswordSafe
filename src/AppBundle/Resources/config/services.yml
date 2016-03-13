@@ -5,6 +5,12 @@ parameters:
 
 
 services:
+    appbundle.twig.fontawesomebrand:
+        class: AppBundle\Twig\FontAwesomeIconExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+
     appbundle.foslistener:
         class: AppBundle\EventListener\FOSListener
         arguments: ['@router']
