@@ -80,7 +80,7 @@ class FontAwesomeIconExtension extends \Twig_Extension
         if($domain === null) return null;
 
         // Strip leading and trailing extras
-        $domain = str_replace(['www.', 'ftp.', '.com'], '', $domain);
+        $domain = str_replace(['www.', 'ftp.', '.com', '.au'], '', $domain);
 
         return $domain;
     }
