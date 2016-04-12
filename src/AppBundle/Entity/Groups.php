@@ -263,7 +263,7 @@ class Groups extends BaseGroup
     public function setParent(\AppBundle\Entity\Groups $parent = null)
     {
         if($this->childExists($parent)) {
-            throw Exception("Attempt to set child as parent");
+            throw new \Exception("Attempt to set child as parent");
         }
         $this->parent = $parent;
 
