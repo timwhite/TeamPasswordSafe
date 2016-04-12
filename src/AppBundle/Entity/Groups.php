@@ -41,11 +41,24 @@ class Groups extends BaseGroup
      */
     private $logins;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Groups", mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Groups", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
+    // TODO when setting parent, ensure that it's not one of our children
+
     public function __construct($name = null)
     {
         parent::__construct($name);
         $this->users = new ArrayCollection();
         $this->logins = new ArrayCollection();
+        $this->children = new ArrayCollection();
 
     }
 
@@ -188,5 +201,82 @@ class Groups extends BaseGroup
     public function __toString()
     {
         return $this->getName();
+    }
+
+    /**
+     * Checks if ID is a child of this Entity
+     */
+    public function childExists($entity)
+    {
+        // Check if the entity is in children, else recurse into children to check
+        if ($this->children->contains($entity)) {
+            return true;
+        } else {
+            foreach ($this->children as $child) {
+                if ($child->childExists($entity)) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Add child
+     *
+     * @param \AppBundle\Entity\Groups $child
+     *
+     * @return Groups
+     */
+    public function addChild(\AppBundle\Entity\Groups $child)
+    {
+        $this->children[] = $child;
+
+        return $this;
+    }
+
+    /**
+     * Remove child
+     *
+     * @param \AppBundle\Entity\Groups $child
+     */
+    public function removeChild(\AppBundle\Entity\Groups $child)
+    {
+        $this->children->removeElement($child);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \AppBundle\Entity\Groups $parent
+     *
+     * @return Groups
+     */
+    public function setParent(\AppBundle\Entity\Groups $parent = null)
+    {
+        if($this->childExists($parent)) {
+            throw Exception("Attempt to set child as parent");
+        }
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \AppBundle\Entity\Groups
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }
