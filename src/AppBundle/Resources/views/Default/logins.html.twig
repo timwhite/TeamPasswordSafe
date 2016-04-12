@@ -9,13 +9,56 @@ Logins
 {% endblock %}
 
 {% block page_content %}
+    <!-- Any child groups -->
+    <div class="row">
+        {% for child in group.children %}
+
+            {% if loop.index is odd %}<div class="clearfix"></div>{% endif %}
+            <div class="col-sm-6 col-md-4">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><a href="{{ path('logins', {'groupid': child.id}) }}"><i class="fa fa-folder-open"></i> {{ child.name }}</a></h3>
+                        {% if is_granted('admin', child) %}
+                            <div class="box-tools pull-right">
+                                <a href="{{ path('edit_group', {'id': child.id}) }}"><i class="fa fa-edit"></i></a>
+                            </div>
+                        {% endif %}
+                        <div class="box-body">
+                            <p>
+                            {{ child.description }}
+                            </p>
+                            <p><strong>{% trans %}Members{% endtrans %}</strong><br/>
+                            {% for user in child.users %}
+                                <span data-toggle="tooltip" title="{{ user.user.email }}">
+                            <img src="{{ user.user.avatar }}&s=15" class="img-rounded "/>
+                                    {{ user.user.name }}
+
+                                    {% if user.adminAccess %}
+                                        <span class="badge">Admin</span>
+                                    {% endif %}
+                            </span><br/>
+                            {% endfor %}
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+    <!-- End Child Groups row -->
+
+    <!-- Logins -->
     <div class="row">
         <div class="col-sm-12">
 
             <div class="row">
                 {% for login in group.logins %}
                     {% if loop.index is odd %}<div class="clearfix"></div>{% endif %}
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 col-md-4">
                         <div class="info-box" id="login_{{ login.id }}">
                             <span class="info-box-icon {{ login.url | fabrandcolor }}"><i class="fa {{ login.url | fabrand }}"></i></span>
                             <div class="info-box-content">
@@ -41,6 +84,7 @@ Logins
             </div>
         </div>
     </div>
+    <!-- End Logins row -->
 
 {% endblock %}
 
