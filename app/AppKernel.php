@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JMS\TranslationBundle\JMSTranslationBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
             new Glifery\EntityHiddenTypeBundle\GliferyEntityHiddenTypeBundle(),
             new Ivory\OrderedFormBundle\IvoryOrderedFormBundle(),

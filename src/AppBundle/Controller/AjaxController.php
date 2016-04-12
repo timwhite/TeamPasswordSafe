@@ -45,7 +45,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * @Route("/search/usersNotInGroup", name="usersNotInGroupSearch")
+     * @Route("/search/usersNotInGroup", name="usersNotInGroupSearch", options={"expose"=true})
      */
     public function usersNotInGroup(Request $request)
     {

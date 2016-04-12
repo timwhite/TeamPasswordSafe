@@ -12,6 +12,7 @@ use AppBundle\Form\UserGroupType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use \Defuse\Crypto\Crypto;
@@ -197,6 +198,30 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/group/{id}/edit", name="edit_group")
+     */
+    public function editGroup(Request $request, Groups $group)
+    {
+        $this->denyAccessUnlessGranted('admin', $group);
+
+        $form = $this->createForm(GroupsType::class, $group);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($group);
+            $em->flush();
+            return $this->redirectToRoute('groups');
+        }
+        return $this->render('AppBundle:Default:editgroup.html.twig', [
+            'form' => $form->createView(),
+            'group' => $group
+        ]);
+
+    }
+
+    /**
      * @Route("/groupadduser", name="add_user_group")
      */
     public function addUserGroup(Request $request) {
@@ -216,12 +241,14 @@ class DefaultController extends Controller
                 // Encrypt key using the user we are adding
                 $usergroup->setGroupKey($keyProtect->encryptGroupKeyForUser($usergroup->getUser(), $usergroup->getGroup()));
                 unset($groupKey);
+            } else {
+                throw new Exception("Missing public key for user");
             }
 
             $em->persist($usergroup);
 
             $em->flush();
-            return $this->redirectToRoute('groups');
+            return $this->redirectToRoute('edit_group', ['id' => $usergroup->getGroup()->getId()]);
         }
 
         return $this->redirectToRoute('groups');

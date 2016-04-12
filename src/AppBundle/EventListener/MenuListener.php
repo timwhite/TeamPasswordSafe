@@ -16,11 +16,14 @@ class MenuListener {
     protected $translator;
     protected $current_user;
 
-    public function __construct(TranslatorInterface $translator, $user)
+    public function __construct(TranslatorInterface $translator, $token_storage)
     {
         $this->translator = $translator;
-        if($user instanceof User) {
-            $this->current_user = $user;
+        if($token_storage->getToken()) {
+            $user = $token_storage->getToken()->getUser();
+            if ($user instanceof User) {
+                $this->current_user = $user;
+            }
         }
     }
 

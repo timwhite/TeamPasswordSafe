@@ -1,0 +1,69 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+
+{% block page_title %}
+Edit Group
+{% endblock %}
+
+{% block page_content %}
+<div class="row">
+
+        <div class="col-sm-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Edit Group</h3>
+                    <div class="box-body">
+                        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        {{ form_end(form) }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Members</h3>
+                <div class="box-body">
+                    <ul class="list-group">
+                        {% for user in group.users %}
+                            <li class="list-group-item" >
+
+                                {% if user.adminAccess %}
+                                    <span class="badge">Admin</span>
+                                {% endif %}
+
+
+                                <span data-toggle="tooltip" title="{{ user.user.email }}">
+                                <img src="{{ user.user.avatar }}&s=50" class="img-rounded "/>
+                                    {{ user.user.name }}
+                                </span>
+                                {% if user.user != app.user and is_granted('admin', group) %}
+                                    <div class="box-tools pull-right">
+                                        <form action="{{ path('remove_user_group', {'groupid': group.id, 'userid': user.user.id}) }}" method="post" onsubmit="return confirm('{% trans %}Are you sure you want to remove this user from the group?{% endtrans %}');">
+
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token('delete_user_from_group') }}"/>
+                                            <a class="btn btn-box-tool" title="{% trans %}Remove user from group{% endtrans %}" data-toggle="tooltip" href="#" onclick="$(this).closest('form').submit()"><i class="fa fa-times"></i></a>
+                                        </form>
+                                    </div><!-- /.box-tools -->
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        {% if is_granted('admin', group) %}
+                            <li class="list-group-item" title="{% trans %}Add User To Group{% endtrans %}">
+                                <i class="fa fa-plus"></i>
+                                <input type="text" class="adduser_search" data-groupid="{{ group.id }}" id="adduser_search_{{ group.id }}" placeholder="{% trans %}Add User To Group{% endtrans %}"/>
+                                <span class="adduser_search_results"></span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

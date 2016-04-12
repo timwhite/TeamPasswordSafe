@@ -39,7 +39,8 @@
         "egeloen/ordered-form-bundle": "^2.0",
         "willdurand/hateoas-bundle": "^1.1",
         "glifery/entity-hidden-type-bundle": "dev-dev-symfony3",
-        "hackzilla/password-generator": "^1.1"
+        "hackzilla/password-generator": "^1.1",
+        "friendsofsymfony/jsrouting-bundle": "^1.6"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",

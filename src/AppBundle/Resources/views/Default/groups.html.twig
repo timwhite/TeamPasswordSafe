@@ -13,11 +13,14 @@ Groups
             <div class="box">
                 <div class="box-header with-border">
                     <h3 class="box-title"><a href="{{ path('logins', {'groupid': group.id}) }}">{{ group.name }}</a></h3>
+                    {% if is_granted('admin', group) %}
+                    <div class="box-tools pull-right">
+                        <a href="{{ path('edit_group', {'id': group.id}) }}"><i class="fa fa-edit"></i></a>
+                    </div>
+                    {% endif %}
                     <div class="box-body">
                         {{ group.description }}
-
-                        <hr>
-                        <h4>{% trans %}Group Members{% endtrans %}</h4>
+                        <h3>{% trans %}Members{% endtrans %}</h3>
                         <ul class="list-group">
                         {% for user in group.users %}
                             <li class="list-group-item" >
@@ -28,27 +31,12 @@ Groups
 
 
                                 <span data-toggle="tooltip" title="{{ user.user.email }}">
-                                <img src="{{ user.user.avatar }}&s=50" class="img-rounded "/>
+                                <img src="{{ user.user.avatar }}&s=25" class="img-rounded "/>
                                 {{ user.user.name }}
                                 </span>
-                                {% if user.user != app.user and is_granted('admin', group) %}
-                                    <div class="box-tools pull-right">
-                                        <form action="{{ path('remove_user_group', {'groupid': group.id, 'userid': user.user.id}) }}" method="post" onsubmit="return confirm('{% trans %}Are you sure you want to remove this user from the group?{% endtrans %}');">
 
-                                        <input type="hidden" name="csrf_token" value="{{ csrf_token('delete_user_from_group') }}"/>
-                                        <a class="btn btn-box-tool" title="{% trans %}Remove user from group{% endtrans %}" data-toggle="tooltip" href="#" onclick="$(this).closest('form').submit()"><i class="fa fa-times"></i></a>
-                                        </form>
-                                    </div><!-- /.box-tools -->
-                                {% endif %}
                             </li>
                         {% endfor %}
-                        {% if is_granted('admin', group) %}
-                        <li class="list-group-item" title="{% trans %}Add User To Group{% endtrans %}">
-                        <i class="fa fa-plus"></i>
-                            <input type="text" class="adduser_search" data-groupid="{{ group.id }}" id="adduser_search_{{ group.id }}" placeholder="{% trans %}Add User To Group{% endtrans %}"/>
-                            <span class="adduser_search_results"></span>
-                        </li>
-                        {% endif %}
                         </ul>
                     </div>
 
@@ -58,54 +46,5 @@ Groups
 
     {% endfor %}
     <a class="fab bg-green" href="{{ path('new_group') }}"><i style="" class="fa fa-plus"></i></a>
-<style>
-    .fab {
-        display: inline-block;
-        border:none;
-        font-size:1.5em;
-        color:white;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        margin: auto;
-        -webkit-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-        -moz-box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-        box-shadow: 2px 3px 3px 0px rgba(41, 41, 41, .3);
-        line-height: 50px;
-        text-align: center;
-        vertical-align: bottom;
-    }
-
-</style>
 </div>
-{% endblock %}
-
-
-{% block javascripts_inline %}
-    {{ parent() }}
-    <script>
-        $('.adduser_search').focus(function() {
-
-            $(this).keyup();
-        })
-        $('.adduser_search').keyup(function() {
-
-            searchText = $(this).val();
-
-            $.ajax({
-                context: this,
-                type: "POST",
-                url: "{{ path('usersNotInGroupSearch') }}",
-                dataType: "html",
-                data: {
-                    groupId: $(this).data('groupid'),
-                    searchText : searchText},
-                success : function(response)
-                {
-                    $(this).next('.adduser_search_results').html(response).show();
-                    return true;
-                }
-            });
-        });
-    </script>
 {% endblock %}
