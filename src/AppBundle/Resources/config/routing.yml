@@ -1,2 +1,5 @@
 avanzu_admin_logout:
     path: /logout
+
+avanzu_admin_home:
+    path: /
