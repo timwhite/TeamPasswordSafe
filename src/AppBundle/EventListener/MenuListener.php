@@ -37,6 +37,26 @@ class MenuListener {
 
     }
 
+    protected function groupCreateMenuItem(Groups $group)
+    {
+        $menuItem = new MenuItemModel(
+            'group_' . $group->getId(),
+            $group->getName(),
+            'logins',
+            ['groupid' => $group->getId()],
+            ''
+        );
+
+        foreach ($group->getChildren() as $child)
+        {
+            $menuItem->addChild(
+                $this->groupCreateMenuItem($child)
+            );
+        }
+
+        return $menuItem;
+    }
+
     protected function getMenu(Request $request) {
         // Build your menu here by constructing a MenuItemModel array
         $menuItems = [];
@@ -52,15 +72,11 @@ class MenuListener {
             );
             foreach ($this->current_user->getGroups() as $usergroup) {
                 $group = $usergroup->getGroup();
-                $groups->addChild(
-                    new MenuItemModel(
-                        'group_' . $group->getId(),
-                        $group->getName(),
-                        'logins',
-                        ['groupid' => $group->getId()],
-                        ''
-                    )
-                );
+                if($group->getParent() == null) {
+                    $groups->addChild(
+                        $this->groupCreateMenuItem($group)
+                    );
+                }
             }
 
             $groups->addChild(

@@ -187,7 +187,6 @@ class User extends BaseUser implements ThemeUser
         return $this->getGroups()->matching($criteria);
     }
 
-
     public function getAvatar() {
         return 'https://secure.gravatar.com/avatar/' . md5( trim( $this->getEmailCanonical() ) ) . '?d=retro';
     }

@@ -25,4 +25,15 @@ class GroupsRepository extends \Doctrine\ORM\EntityRepository
 
         return $query->getResult();
     }
+
+    public function getTopLevel()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('g')
+            ->from('AppBundle:Groups', 'g')
+            ->where('g.parent is NULL')
+            ->getQuery();
+
+        return $query->getResult();
+    }
 }
