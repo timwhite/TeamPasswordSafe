@@ -100,17 +100,18 @@ class MenuListener {
 
         // A child with default circle icon
         $groups->addChild(new MenuItemModel('ChildTwoItemId', 'ChildTwoDisplayName', 'child_2_route'));*/
-        return $this->activateByRoute($request->get('_route'), $menuItems);
+        return $this->activateByRoute($request->get('_route'), $request->get('_route_params'), $menuItems);
     }
 
-    protected function activateByRoute($route, $items) {
+    protected function activateByRoute($route, $route_params, $items) {
 
+        /** @var MenuItemModel $item */
         foreach($items as $item) {
             if($item->hasChildren()) {
-                $this->activateByRoute($route, $item->getChildren());
+                $this->activateByRoute($route, $route_params, $item->getChildren());
             }
             else {
-                if($item->getRoute() == $route) {
+                if($item->getRoute() == $route && $item->getRouteArgs() == $route_params) {
                     $item->setIsActive(true);
                 }
             }
