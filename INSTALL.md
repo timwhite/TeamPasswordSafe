@@ -34,5 +34,9 @@
    patch -p 1  < ../../../../../285.diff
    cd ../../../../../
    ```
+ 6. Fetch required vendor files   
+   ```bash
+   avanzu:admin:fetch-vendor
+   ```
 
- 6. Point your webserver to the web directory of the TeamPasswordSafe directory and following Symfony hosting instructions <http://symfony.com/doc/current/cookbook/configuration/web_server_configuration.html>
+ 7. Point your webserver to the web directory of the TeamPasswordSafe directory and following Symfony hosting instructions <http://symfony.com/doc/current/cookbook/configuration/web_server_configuration.html>
